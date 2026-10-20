@@ -203,3 +203,17 @@ Studio 里的 `library-wardrobe`（矢量版全部配饰与表情）、`library-
 | `canvas.tsx` | `BrandMark` 原创示例 logo、`PopTitle` 短语逐个浮现的大标题（`〔词〕` 荧光笔）、`SitePage` 原创落地页示意（`seed` 换配色）、`BrowserMock` 浏览器窗口（`scrollAt` 页面滚动）、`FeatureCard` 功能卡 + 侧边弹出胶囊、`CheckSticker` 对勾贴纸、`ThumbWall` 页面缩略图墙、`LogoTiles` 集成卡片行（「已接入」胶囊）、`InkPill` 黑胶囊、`EndCard` 收尾卡 |
 
 要点：界面一直不动，节奏靠聊天冒泡、片段落轨和画布换镜头推进；画布里硬切，整屏只在结尾切一次收尾卡；荧光黄绿是唯一的重点色，其余颜色只属于小角色；网页一律用 `SitePage` 原创示意，不放真实网站截图和第三方 logo。
+
+## 3D 舞台 `three/`
+
+横屏 16:9 的可复用 3D 层，做“实物镜头”而不是信息图：低多边形程序化几何 + 暖金三点光 + 雾 + 加法光晕。预览：Studio 的 `library-three`，以及 `ep52-engine-3d`（8.5 秒蒸汽机 PoC）。说明：`docs/3d-poc.md`。
+
+| 文件 | 内容 |
+|---|---|
+| `theme.ts` | 3D 配色 `T`（和 `G` 对齐的底色/雾/金/暖光/朱红）、相机常量 `CAM` |
+| `ThreeStage.tsx` | `ThreeStage`：`ThreeCanvas` + 相机 `CameraRig` + ACES/sRGB + 暖金三点光 + 雾；`CamSpec` 是相机位置/朝向的纯数据 |
+| `props.tsx` | 低多边形道具：`SteamEngine3D`（锅炉、A 架、横梁、汽缸、飞轮、连杆、煤堆、蒸汽）、`Flywheel`、`CoalChunk` / `CoalPile`、`Rod`、`Dust3D`、`GlowSprite`、`SteamPuffs`、`GoldMat` / `DarkMat` / `EmberMat` |
+| `ThreeDemo.tsx` | 10 秒 `library-three` 演示，验证舞台/材质/灯光/相机 |
+
+要点：3D 动画也必须由帧号算出来，**不要用 `useFrame`**（`ThreeCanvas` 渲染时把 `frameloop` 压成 `never`）；中文继续用 DOM 字幕，不做 3D TextGeometry；`remotion.config.ts` 里开 `Config.setChromiumOpenGlRenderer('angle')`；渲染 `--concurrency=1`。当前没有用 `@react-three/postprocessing` 的 Bloom/DOF——在 `ThreeCanvas` 下会黑屏，改用材质自发光 + `GlowSprite` + 雾。
+

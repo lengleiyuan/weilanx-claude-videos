@@ -4,6 +4,8 @@
   "type": "module",
   "scripts": {
     "studio": "NODE_OPTIONS=--max-old-space-size=4096 remotion studio src/index.ts",
+    "studio:3d": "NODE_OPTIONS=--max-old-space-size=4096 remotion studio src/three-entry.tsx",
+    "render:3d-poc": "NODE_OPTIONS=--max-old-space-size=4096 remotion render src/three-entry.tsx ep52-engine-3d out/ep52-engine-3d.mp4 --scale=1 --concurrency=1 --codec=h264 --crf=20 --pixel-format=yuv420p",
     "audio": "NODE_OPTIONS=--max-old-space-size=4096 node audio/synth.mjs && for f in audio/episodes/*.mjs; do node \"$f\"; done",
     "cues": "NODE_OPTIONS=--max-old-space-size=4096 node scripts/srt2json.mjs",
     "export": "NODE_OPTIONS=--max-old-space-size=4096 bash scripts/export.sh",
@@ -11,11 +13,15 @@
     "test": "NODE_OPTIONS=--max-old-space-size=4096 vitest run"
   },
   "dependencies": {
+    "@react-three/fiber": "^9.8.2",
     "@remotion/cli": "^4.0.529",
     "@remotion/google-fonts": "^4.0.529",
+    "@remotion/three": "^4.0.529",
+    "@types/three": "^0.170.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
-    "remotion": "^4.0.529"
+    "remotion": "^4.0.529",
+    "three": "^0.178.0"
   },
   "devDependencies": {
     "@types/node": "^26.6.3",
