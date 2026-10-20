@@ -75,7 +75,7 @@
 | 风格 | skill | 交付方式 |
 |---|---|---|
 | 蒸馏参考视频成新风格 | `weilanx-creator-distill-video` | 产出 `src/library/<风格ID>/` + 预览作品 + 配方卡 |
-| 给一条参考视频，直接 2D 复刻成片 | `weilanx-creator-reference-replica` | **一锅出**：拆片 → 重写文案 → 测拍排时间表 → 2D 画面 → 自检 → 导出 + 3:4 封面 + 发布文案 + 双语字幕 + 报告 |
+| 给一条参考视频，直接 2D 复刻成片（别名 `r2v` / 拆片） | `weilanx-creator-reference-replica` | **一锅出**：拆片 → 重写文案 → 测拍排时间表 → 2D 画面 → 自检 → 导出 + 3:4 封面 + 发布文案 + 双语字幕 + 报告 |
 | 黑金光影风（博弈论 / 反直觉模型，无口播） | `weilanx-creator-blackgold-video` | **一锅出**：不等确认，直接导出 + 3:4 封面 + 发布文案 + 双语字幕稿 |
 | 战术屏科普风（FPS 科普，无口播） | `weilanx-creator-fps-video` | **一锅出**：直接导出 + 封面 + 发布文案 + 字幕稿 |
 | 灯火史话风（中国古代知识，无口播） | `weilanx-creator-lamplight-video` | 先给文案与卡点稿确认，再出片 |
