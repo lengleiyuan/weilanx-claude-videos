@@ -1282,7 +1282,7 @@ export const ValueScene: React.FC<{f: number; focus?: 'band' | 'ai' | 'all'; at?
     <AbsoluteFill>
       <SceneLabel f={f} at={at} text="VALUE MIGRATION" sub="价格下跌的地方，价值会迁移到稀缺的地方" />
       <div style={{position: 'absolute', left: 0, right: 0, top: 300, textAlign: 'center', fontFamily: GF.cn, fontSize: 64, fontWeight: 900, letterSpacing: 18, ...goldText(0.7), opacity: p}}>价值迁徙</div>
-      <div style={{position: 'absolute', left: 220, top: 460, width: 650, opacity: (bandOn ? 1 : 0.12) * clamp01((f - at - 10) / 18), transform: `scale(${focus === 'band' ? 1.12 : 1})`, transformOrigin: 'left center'}}>
+      <div style={{position: 'absolute', left: 220, top: 460, width: 650, opacity: (bandOn ? 1 : 0) * clamp01((f - at - 10) / 18), transform: `scale(${focus === 'band' ? 1.12 : 1})`, transformOrigin: 'left center'}}>
         <div style={{fontFamily: GF.cn, fontSize: 34, letterSpacing: 6, color: G.ivory}}>带宽 <span style={{color: G.ivoryFaint}}>↓</span></div>
         <svg width={620} height={80} style={{marginTop: 12}}>
           {arrow(20, 40, 560, 40, clamp01((f - at - 20) / 20))}
@@ -1294,7 +1294,7 @@ export const ValueScene: React.FC<{f: number; focus?: 'band' | 'ai' | 'all'; at?
           <span style={{marginLeft: 12}}>注意力</span><span style={{fontFamily: GF.num, fontSize: 30, color: G.goldBright}}>1 → 100</span>
         </div>
       </div>
-      <div style={{position: 'absolute', left: 1050, top: 460, width: 680, opacity: (aiOn ? 1 : 0.12) * clamp01((f - at - 24) / 18), transform: `scale(${focus === 'ai' ? 1.12 : 1})`, transformOrigin: 'right center'}}>
+      <div style={{position: 'absolute', left: 1050, top: 460, width: 680, opacity: (aiOn ? 1 : 0) * clamp01((f - at - 24) / 18), transform: `scale(${focus === 'ai' ? 1.12 : 1})`, transformOrigin: 'right center'}}>
         <div style={{fontFamily: GF.cn, fontSize: 34, letterSpacing: 6, color: G.ivory}}>AI 方案 <span style={{color: G.ivoryFaint}}>↓</span></div>
         <svg width={620} height={80} style={{marginTop: 12}}>
           {arrow(20, 40, 560, 40, clamp01((f - at - 34) / 20))}
@@ -1305,6 +1305,36 @@ export const ValueScene: React.FC<{f: number; focus?: 'band' | 'ai' | 'all'; at?
           <span style={{marginLeft: 12}}>稀缺项</span><span style={{fontFamily: GF.num, fontSize: 30, color: G.goldBright}}>↑↑</span>
         </div>
       </div>
+      {focus === 'band' ? (
+        <div style={{position: 'absolute', left: 1140, top: 300, width: 620, opacity: clamp01((f - at - 18) / 20)}}>
+          <div style={{fontFamily: GF.cn, fontSize: 22, letterSpacing: 5, color: G.ivoryDim}}>注意力 · 新的稀缺</div>
+          <div style={{marginTop: 20, transform: 'scale(1.35)', transformOrigin: '0 0'}}><EyeIcon o={1} /></div>
+          {[['屏幕', 0.82], ['内容', 0.64], ['注意力', 0.42]].map(([k, v], i) => (
+            <div key={k} style={{marginTop: i === 0 ? 150 : 18}}>
+              <div style={{display: 'flex', justifyContent: 'space-between', fontFamily: GF.cn, fontSize: 18, color: G.ivoryDim}}><span>{k}</span><span style={{fontFamily: GF.num, color: G.goldBright}}>{i === 2 ? '↑↑' : `${Math.round(Number(v) * 100)}%`}</span></div>
+              <div style={{position: 'relative', height: 7, background: 'rgba(239,230,210,0.1)', marginTop: 7}}><div style={{position: 'absolute', left: 0, top: 0, bottom: 0, width: `${Number(v) * 100}%`, background: i === 2 ? G.goldBright : G.gold}} /></div>
+            </div>
+          ))}
+        </div>
+      ) : null}
+      {focus === 'ai' ? (
+        <div style={{position: 'absolute', left: 160, top: 300, width: 620, opacity: clamp01((f - at - 18) / 20)}}>
+          <div style={{fontFamily: GF.cn, fontSize: 22, letterSpacing: 5, color: G.ivoryDim}}>AI 的背面 · 能源与数据</div>
+          <svg width={240} height={200} style={{marginTop: 20}}>
+            <rect x={30} y={30} width={160} height={140} fill="rgba(214,180,106,0.08)" stroke={G.goldBright} strokeWidth={2} />
+            {Array.from({length: 8}, (_, i) => <line key={i} x1={30} y1={50 + i * 16} x2={12} y2={50 + i * 16} stroke={G.gold} strokeWidth={2} />)}
+            {Array.from({length: 8}, (_, i) => <line key={`r${i}`} x1={190} y1={50 + i * 16} x2={208} y2={50 + i * 16} stroke={G.gold} strokeWidth={2} />)}
+            <rect x={65} y={65} width={90} height={70} fill="rgba(3,3,3,0.7)" stroke={G.gold} />
+            <text x={110} y={108} textAnchor="middle" fontFamily={GF.num} fontSize={22} fill={G.goldBright}>GPU</text>
+          </svg>
+          {[['能源', 0.78], ['专有数据', 0.58], ['判断力', 0.36]].map(([k, v], i) => (
+            <div key={k} style={{marginTop: i === 0 ? 12 : 16}}>
+              <div style={{display: 'flex', justifyContent: 'space-between', fontFamily: GF.cn, fontSize: 18, color: G.ivoryDim}}><span>{k}</span><span style={{fontFamily: GF.num, color: G.goldBright}}>↑</span></div>
+              <div style={{position: 'relative', height: 7, background: 'rgba(239,230,210,0.1)', marginTop: 7}}><div style={{position: 'absolute', left: 0, top: 0, bottom: 0, width: `${Number(v) * 100}%`, background: G.goldBright}} /></div>
+            </div>
+          ))}
+        </div>
+      ) : null}
       <div style={{position: 'absolute', left: 0, right: 0, top: 840, textAlign: 'center', fontFamily: GF.cn, fontSize: 20, letterSpacing: 4, color: G.ivoryFaint, opacity: clamp01((f - at - 60) / 24)}}>
         便宜的东西负责普及，稀缺的东西负责定价
       </div>
@@ -1403,7 +1433,7 @@ export const TimeScene: React.FC<{f: number; phase?: 'clock' | 'tasks' | 'bill' 
               ['更长的通勤', '×2.1'],
               ['更满的排期', '×3.7'],
             ].map(([k, v], i) => (
-              <div key={k} style={{position: 'absolute', left: 34, right: 34, top: 150 + i * 62, display: 'flex', justifyContent: 'space-between', fontFamily: GF.cn, fontSize: 22, color: '#2c1d0c'}}>
+              <div key={k} style={{position: 'absolute', left: 34, right: 34, top: 138 + i * 56, display: 'flex', justifyContent: 'space-between', fontFamily: GF.cn, fontSize: 21, color: '#2c1d0c'}}>
                 <span>{k}</span>
                 <span style={{fontFamily: GF.num, fontSize: 30}}>{v}</span>
               </div>
@@ -1414,11 +1444,19 @@ export const TimeScene: React.FC<{f: number; phase?: 'clock' | 'tasks' | 'bill' 
               <span style={{fontFamily: GF.num, fontSize: 38}}>→ 新的标准</span>
             </div>
           </div>
-          <div style={{position: 'absolute', left: 220, top: 300, width: 440, opacity: clamp01((f - fb(97) - 10) / 20)}}>
-            <div style={{fontFamily: GF.cn, fontSize: 24, letterSpacing: 5, color: G.ivoryDim}}>1865 → 2025</div>
-            <div style={{fontFamily: GF.cn, fontSize: 40, lineHeight: 1.6, color: G.ivory, marginTop: 18}}>从煤到 AI，<br />问题没有变：</div>
-            <div style={{fontFamily: GF.cn, fontSize: 34, lineHeight: 1.5, color: G.goldBright, marginTop: 10}}>省下来的，去哪了？</div>
-          </div>
+          {phase === 'close' ? (
+            <div style={{position: 'absolute', left: 150, top: 260, width: 520, opacity: clamp01((f - at - 6) / 14)}}>
+              <div style={{fontFamily: GF.num, fontSize: 220, lineHeight: 1, ...goldText(0.6)}}>×10</div>
+              <div style={{fontFamily: GF.cn, fontSize: 30, letterSpacing: 6, color: G.ivory, marginTop: 6}}>更多的调用</div>
+              <div style={{fontFamily: GF.cn, fontSize: 24, lineHeight: 1.7, color: G.ivoryDim, marginTop: 24}}>单价越薄，<br />规模越厚；<br />账单越大。</div>
+            </div>
+          ) : (
+            <div style={{position: 'absolute', left: 220, top: 300, width: 440, opacity: clamp01((f - fb(97) - 10) / 20)}}>
+              <div style={{fontFamily: GF.cn, fontSize: 24, letterSpacing: 5, color: G.ivoryDim}}>1865 → 2025</div>
+              <div style={{fontFamily: GF.cn, fontSize: 40, lineHeight: 1.6, color: G.ivory, marginTop: 18}}>从煤到 AI，<br />问题没有变：</div>
+              <div style={{fontFamily: GF.cn, fontSize: 34, lineHeight: 1.5, color: G.goldBright, marginTop: 10}}>省下来的，去哪了？</div>
+            </div>
+          )}
           <SourceNote>示意：账单数字为方向性示意，不是实际统计。</SourceNote>
         </>
       )}
@@ -1428,7 +1466,7 @@ export const TimeScene: React.FC<{f: number; phase?: 'clock' | 'tasks' | 'bill' 
 
 /* ---------------- 5 分钟版：门槛 / 结尾 ---------------- */
 
-export const FinaleScene: React.FC<{f: number; phase?: 'gate' | 'clock'; at?: number}> = ({f, phase = 'gate', at = SHOTS.finaleGate[0]}) => {
+export const FinaleScene: React.FC<{f: number; phase?: 'gate' | 'clock'; at?: number}> = ({f, phase = 'gate', at = SHOTS.commuterBroll[0]}) => {
   const open = clamp01((f - at) / 30);
   const o = clamp01((f - at) / 18);
   const clock = phase === 'clock';
@@ -1475,6 +1513,311 @@ export const FinaleScene: React.FC<{f: number; phase?: 'gate' | 'clock'; at?: nu
         <div style={{position: 'absolute', left: 0, right: 0, top: 880, textAlign: 'center', fontFamily: GF.cn, fontSize: 34, letterSpacing: 6, color: G.ivory, opacity: o}}>把省下来的时间，还给自己。</div>
       ) : null}
       <SourceNote>示意：门槛降低后，新增用户与新增用量会一起进来；省下来的资源会被系统重新定价。</SourceNote>
+    </AbsoluteFill>
+  );
+};
+
+/* ---------------- 5 分钟版：插入镜头 ---------------- */
+
+export const PaperMountainScene: React.FC<{f: number}> = ({f}) => {
+  const at = SHOTS.paperMountain[0];
+  const p = clamp01((f - at) / 26);
+  const rows = 9;
+  return (
+    <AbsoluteFill>
+      <SceneLabel f={f} at={at} text="PAPER MOUNTAIN · 1975—NOW" sub="无纸化喊了二十年，纸却堆成了山" />
+      <div style={{position: 'absolute', left: 110, top: 250, opacity: clamp01((f - at) / 16)}}>
+        <div style={{fontFamily: GF.num, fontSize: 190, lineHeight: 1, ...goldText(0.7)}}>×3</div>
+        <div style={{fontFamily: GF.cn, fontSize: 26, letterSpacing: 6, color: G.ivoryDim, marginTop: 4}}>全球用纸量</div>
+      </div>
+      <svg width={1920} height={1080} style={{position: 'absolute'}}>
+        <defs><radialGradient id="paper-glow" cx="50%" cy="50%" r="50%"><stop offset="0" stopColor="#f3dca0" stopOpacity={0.18} /><stop offset="1" stopColor="#d6b46a" stopOpacity={0} /></radialGradient></defs>
+        <ellipse cx={960} cy={700} rx={520} ry={260} fill="url(#paper-glow)" />
+        {Array.from({length: rows}, (_, row) => {
+          const n = row + 2;
+          return Array.from({length: n}, (_, col) => {
+            const idx = row * 10 + col;
+            const o = clamp01((f - at - row * 4 - col * 1.5) / 12);
+            const x = 760 + (col - (n - 1) / 2) * 84 + row * 10;
+            const y = 800 - row * 48;
+            return <rect key={`${row}-${col}`} x={x} y={y} width={78} height={44} fill="rgba(239,230,210,0.095)" stroke={G.goldBright} opacity={o} transform={`rotate(${(idx % 5 - 2) * 1.5} ${x + 39} ${y + 22})`} />;
+          });
+        })}
+        {Array.from({length: 70}, (_, i) => {
+          const o = clamp01((f - at - 10 - rand(i + 700) * 20) / 30);
+          return <circle key={i} cx={700 + rand(i + 710) * 520} cy={420 - rand(i + 720) * 240} r={1 + rand(i + 730) * 3} fill={G.goldBright} opacity={o * 0.5} />;
+        })}
+        <line x1={1320} y1={260} x2={1320} y2={760} stroke={G.goldFaint} strokeWidth={1} />
+        {[0, 1, 2, 3].map((i) => (
+          <g key={i} opacity={clamp01((f - at - i * 6) / 12)}>
+            <text x={1350} y={300 + i * 110} fontFamily={GF.num} fontSize={38} fill={G.goldBright}>{['1975', '1995', '2015', '2025'][i]}</text>
+            <text x={1350} y={340 + i * 110} fontFamily={GF.cn} fontSize={18} letterSpacing={3} fill={G.ivoryDim}>{['无纸化提出', '邮件普及', '云文档', 'AI 办公'][i]}</text>
+          </g>
+        ))}
+        <path d={`M 700 820 Q 900 ${760 - p * 40} 1100 780 T 1500 730`} fill="none" stroke={G.goldBright} strokeWidth={2} strokeDasharray="8 10" opacity={0.4 + p * 0.5} />
+      </svg>
+      <SourceNote>示意：用纸量按“无纸化办公提出以来全球用纸约 ×3”的方向性口径绘制，不是逐年统计。</SourceNote>
+    </AbsoluteFill>
+  );
+};
+
+export const ScreenSplitScene: React.FC<{f: number}> = ({f}) => {
+  const at = SHOTS.screenSplit[0];
+  const p = clamp01((f - at) / 30);
+  return (
+    <AbsoluteFill>
+      <SceneLabel f={f} at={at} text="TEXT → 4K · BANDWIDTH" sub="网速快了一百倍，网页却变成了 4K 视频" />
+      <div style={{position: 'absolute', left: 110, top: 220, width: 760, height: 540, border: `1px solid ${G.goldLine}`, background: 'rgba(239,230,210,0.025)', opacity: 0.35 + 0.65 * (1 - p * 0.3)}}>
+        <div style={{position: 'absolute', left: 34, top: 26, fontFamily: GF.latin, fontSize: 15, letterSpacing: 6, color: G.ivoryDim}}>TEXT PAGE · 2000</div>
+        {Array.from({length: 12}, (_, i) => (
+          <div key={i} style={{position: 'absolute', left: 34, top: 80 + i * 32, width: i % 4 === 3 ? 380 : 650, height: 8, background: 'rgba(239,230,210,0.18)', opacity: clamp01((f - at - i * 2) / 10)}} />
+        ))}
+        <div style={{position: 'absolute', left: 34, bottom: 32, fontFamily: GF.cn, fontSize: 22, letterSpacing: 4, color: G.ivoryFaint}}>纯文字 · 几十 KB</div>
+      </div>
+      <div style={{position: 'absolute', left: 1000, top: 200, width: 800, height: 450, opacity: clamp01((f - at - 12) / 24), transform: `scale(${0.94 + 0.06 * p})`, border: `1px solid ${G.goldBright}`, background: 'linear-gradient(135deg, #171006, #3a2a12 45%, #0a0906)', boxShadow: '0 0 90px rgba(214,180,106,0.12)'}}>
+        <div style={{position: 'absolute', inset: 0, background: 'radial-gradient(circle at 60% 40%, rgba(243,220,160,0.18), transparent 60%)'}} />
+        <div style={{position: 'absolute', left: 50, top: 44, fontFamily: GF.latin, fontSize: 16, letterSpacing: 8, color: G.ivoryDim}}>4K · 60FPS · HDR</div>
+        <div style={{position: 'absolute', left: 50, bottom: 44, fontFamily: GF.cn, fontSize: 34, letterSpacing: 6, color: G.ivory}}>一帧画面，几 MB</div>
+        <div style={{position: 'absolute', left: 480, top: 150, width: 120, height: 120, borderRadius: '50%', border: `2px solid ${G.goldBright}`, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+          <div style={{width: 0, height: 0, borderLeft: `38px solid ${G.goldBright}`, borderTop: '24px solid transparent', borderBottom: '24px solid transparent', marginLeft: 10}} />
+        </div>
+        {Array.from({length: 16}, (_, i) => {
+          const u = ((f * 0.002 + i * 0.06) % 1 + 1) % 1;
+          return <circle key={i} cx={40 + u * 720} cy={100 + Math.sin(i + f / 10) * 120} r={2 + rand(i + 800) * 3} fill={G.goldBright} opacity={0.25 + 0.4 * rand(i + 810)} />;
+        })}
+      </div>
+      <div style={{position: 'absolute', left: 880, top: 420, width: 100, height: 100, transform: 'translate(-50%,-50%)', opacity: p}}>
+        <svg width={100} height={100}><line x1={0} y1={50} x2={100} y2={50} stroke={G.goldBright} strokeWidth={2} /><polygon points="100,50 86,42 86,58" fill={G.goldBright} /></svg>
+      </div>
+      <div style={{position: 'absolute', left: 300, top: 820, width: 1320, opacity: clamp01((f - at - 8) / 18)}}>
+        <div style={{display: 'flex', justifyContent: 'space-between', fontFamily: GF.cn, fontSize: 20, letterSpacing: 4, color: G.ivoryDim}}><span>带宽</span><span>4K 视频</span></div>
+        <div style={{position: 'relative', height: 10, background: 'rgba(239,230,210,0.1)', marginTop: 10}}>
+          <div style={{position: 'absolute', left: 0, top: 0, bottom: 0, width: `${20 + 80 * p}%`, background: G.goldBright, boxShadow: `0 0 20px ${G.gold}`}} />
+        </div>
+        <div style={{display: 'flex', justifyContent: 'space-between', fontFamily: GF.num, fontSize: 22, color: G.ivoryFaint, marginTop: 8}}><span>1×</span><span>100×</span></div>
+      </div>
+      <SourceNote>示意：网速与画质用 1×/100×、文字页/4K 帧做对照，不是实际测速。</SourceNote>
+    </AbsoluteFill>
+  );
+};
+
+export const VersionDeckScene: React.FC<{f: number}> = ({f}) => {
+  const at = SHOTS.versionDeck[0];
+  const p = clamp01((f - at) / 26);
+  return (
+    <AbsoluteFill>
+      <SceneLabel f={f} at={at} text="TEN VERSIONS · ONE AFTERNOON" sub="一份文件改两遍就定稿，AI 一下午出十版" />
+      <div style={{position: 'absolute', left: 100, top: 250, opacity: p}}>
+        <div style={{fontFamily: GF.num, fontSize: 190, lineHeight: 1, ...goldText(0.65)}}>×10</div>
+        <div style={{fontFamily: GF.cn, fontSize: 26, letterSpacing: 6, color: G.ivoryDim}}>一下午的方案</div>
+      </div>
+      <div style={{position: 'absolute', left: 660, top: 180, width: 780, height: 620}}>
+        {Array.from({length: 10}, (_, i) => {
+          const o = clamp01((f - at - 6 - i * 4) / 10);
+          const ang = (i - 4.5) * 7;
+          return (
+            <div key={i} style={{position: 'absolute', left: 340 + (i - 4.5) * 34, top: 70 + Math.abs(i - 4.5) * 22, width: 150, height: 420, opacity: o, transform: `rotate(${ang}deg)`, transformOrigin: '50% 100%', border: `1px solid ${G.goldLine}`, background: 'rgba(239,230,210,0.06)', boxShadow: '0 20px 50px rgba(0,0,0,0.4)'}}>
+              <div style={{position: 'absolute', left: 14, top: 14, fontFamily: GF.num, fontSize: 18, color: G.goldBright}}>v{i + 1}</div>
+              {Array.from({length: 5}, (_, j) => <div key={j} style={{position: 'absolute', left: 14, right: 14, top: 60 + j * 28, height: 5, background: 'rgba(239,230,210,0.18)'}} />)}
+            </div>
+          );
+        })}
+        <div style={{position: 'absolute', left: 300, top: 510, width: 190, height: 80, border: `1px solid ${G.goldBright}`, background: 'rgba(24,18,10,0.9)', opacity: p, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: GF.cn, fontSize: 24, letterSpacing: 4, color: G.goldBright}}>定稿 v2</div>
+      </div>
+      <div style={{position: 'absolute', right: 120, top: 300, width: 260, height: 260, opacity: p}}>
+        <svg width={260} height={260} viewBox="0 0 260 260">
+          <circle cx={130} cy={130} r={104} fill="rgba(3,3,3,0.55)" stroke={G.goldLine} strokeWidth={2} />
+          {Array.from({length: 12}, (_, i) => {
+            const a = (i / 12) * Math.PI * 2;
+            return <line key={i} x1={130 + Math.cos(a) * 92} y1={130 + Math.sin(a) * 92} x2={130 + Math.cos(a) * 104} y2={130 + Math.sin(a) * 104} stroke={G.gold} strokeWidth={i % 3 === 0 ? 3 : 1} />;
+          })}
+          <line x1={130} y1={130} x2={130 + Math.cos(-Math.PI / 2 + f * 0.02) * 60} y2={130 + Math.sin(-Math.PI / 2 + f * 0.02) * 60} stroke={G.goldBright} strokeWidth={4} />
+          <line x1={130} y1={130} x2={130 + Math.cos(f * 0.006) * 84} y2={130 + Math.sin(f * 0.006) * 84} stroke={G.ivory} strokeWidth={2} />
+        </svg>
+        <div style={{textAlign: 'center', fontFamily: GF.cn, fontSize: 22, letterSpacing: 5, color: G.ivoryDim, marginTop: 10}}>一下午</div>
+      </div>
+      <div style={{position: 'absolute', left: 300, top: 840, width: 1320, opacity: p}}>
+        <div style={{fontFamily: GF.cn, fontSize: 20, letterSpacing: 4, color: G.ivoryDim, marginBottom: 8}}>职场及格线</div>
+        <div style={{position: 'relative', height: 8, background: 'rgba(239,230,210,0.1)'}}>
+          <div style={{position: 'absolute', left: 0, top: 0, bottom: 0, width: `${25 + 75 * p}%`, background: G.goldBright}} />
+          <div style={{position: 'absolute', left: '40%', top: -12, height: 32, width: 2, background: G.ivory}} />
+        </div>
+      </div>
+      <SourceNote>示意：十版方案、两遍定稿是对工作流的示意，不是统计。</SourceNote>
+    </AbsoluteFill>
+  );
+};
+
+export const ReceiptRollScene: React.FC<{f: number}> = ({f}) => {
+  const at = SHOTS.receiptRoll[0];
+  const p = clamp01((f - at) / 34);
+  const rows = [
+    ['更多灯', '×2.4'],
+    ['更宽的路', '×3.1'],
+    ['更多的调用', '×10'],
+    ['更高的及格线', '×？'],
+    ['更长的通勤', '×2.1'],
+    ['更满的排期', '×3.7'],
+  ];
+  return (
+    <AbsoluteFill>
+      <SceneLabel f={f} at={at} text="THE BILL PRINTER" sub="省下来的，最后都从打印机里出来了" />
+      <div style={{position: 'absolute', left: 700, top: 110, width: 520, height: 140, border: `1px solid ${G.goldLine}`, background: 'rgba(24,18,10,0.95)'}}>
+        <div style={{position: 'absolute', left: 24, top: 18, fontFamily: GF.latin, fontSize: 14, letterSpacing: 6, color: G.ivoryDim}}>TOTAL BILL · RECEIPT</div>
+        <div style={{position: 'absolute', left: 24, right: 24, bottom: 30, height: 10, background: 'rgba(0,0,0,0.6)', border: `1px solid ${G.goldFaint}`}} />
+        <div style={{position: 'absolute', left: 24, bottom: 12, width: `${p * 460}px`, height: 3, background: G.goldBright}} />
+      </div>
+      <div style={{position: 'absolute', left: 760, top: 250, width: 400, height: 600 * p, overflow: 'hidden', background: 'linear-gradient(180deg, #d9c59a, #c3a873)', border: `1px solid ${G.goldBright}`, boxShadow: '0 30px 80px rgba(0,0,0,0.6)'}}>
+        <div style={{position: 'absolute', left: 24, top: 22, fontFamily: GF.latin, fontSize: 14, letterSpacing: 5, color: '#3a2a12'}}>THE TOTAL BILL</div>
+        <div style={{position: 'absolute', left: 24, top: 50, fontFamily: GF.cn, fontSize: 38, fontWeight: 900, color: '#1c1206'}}>总账单</div>
+        {rows.map(([k, v], i) => (
+          <div key={k} style={{position: 'absolute', left: 24, right: 24, top: 120 + i * 62, display: 'flex', justifyContent: 'space-between', fontFamily: GF.cn, fontSize: 22, color: '#2c1d0c', opacity: clamp01((f - at - 8 - i * 4) / 10)}}>
+            <span>{k}</span><span style={{fontFamily: GF.num, fontSize: 30}}>{v}</span>
+          </div>
+        ))}
+        <div style={{position: 'absolute', left: 24, right: 24, bottom: 24, borderTop: '1px solid rgba(30,20,8,0.4)', paddingTop: 12, display: 'flex', justifyContent: 'space-between', fontFamily: GF.cn, fontSize: 20, color: '#1c1206', opacity: clamp01((f - at - 34) / 10)}}>
+          <span>省下来的</span><span style={{fontFamily: GF.num, fontSize: 30}}>→ 新标准</span>
+        </div>
+      </div>
+      <div style={{position: 'absolute', left: 1250, top: 340, width: 480, opacity: clamp01((f - at - 12) / 20)}}>
+        <div style={{fontFamily: GF.cn, fontSize: 24, letterSpacing: 5, color: G.ivoryDim}}>1865 → 2025</div>
+        <div style={{fontFamily: GF.cn, fontSize: 40, lineHeight: 1.55, color: G.ivory, marginTop: 16}}>从煤到 AI，<br />问题没有变：</div>
+        <div style={{fontFamily: GF.cn, fontSize: 32, lineHeight: 1.5, color: G.goldBright, marginTop: 10}}>省下来的，<br />去哪了？</div>
+      </div>
+      <SourceNote>示意：收据条目为方向性示意，不是实际账单。</SourceNote>
+    </AbsoluteFill>
+  );
+};
+
+export const BillMontageScene: React.FC<{f: number}> = ({f}) => {
+  const at = SHOTS.billMontage[0];
+  const items = [
+    ['灯', '×2.4', '更亮'],
+    ['路', '×3.1', '更宽'],
+    ['调用', '×10', '更多'],
+    ['排期', '×3.7', '更满'],
+  ];
+  return (
+    <AbsoluteFill>
+      <SceneLabel f={f} at={at} text="THE BILL · FOUR COLUMNS" sub="省下来的，最后都被记进了新的账单" />
+      <div style={{position: 'absolute', left: 0, right: 0, top: 210, textAlign: 'center', fontFamily: GF.cn, fontSize: 38, letterSpacing: 12, ...goldText(0.55)}}>总账单，从来没有省掉</div>
+      <div style={{position: 'absolute', left: 170, top: 330, width: 1580, display: 'flex', gap: 26}}>
+        {items.map(([k, v, s], i) => {
+          const o = clamp01((f - at - 6 - i * 8) / 12);
+          return (
+            <div key={k} style={{width: 370, height: 360, opacity: o, border: `1px solid ${G.goldLine}`, background: 'linear-gradient(160deg, rgba(34,24,12,0.8), rgba(3,3,3,0.3))', padding: '26px 24px'}}>
+              <div style={{fontFamily: GF.cn, fontSize: 26, letterSpacing: 5, color: G.ivoryDim}}>{k}</div>
+              <div style={{fontFamily: GF.num, fontSize: 92, lineHeight: 1, marginTop: 18, ...goldText(0.6)}}>{v}</div>
+              <div style={{fontFamily: GF.cn, fontSize: 22, letterSpacing: 4, color: G.ivory, marginTop: 20}}>{s}</div>
+              <div style={{position: 'relative', height: 8, background: 'rgba(239,230,210,0.1)', marginTop: 26}}>
+                <div style={{position: 'absolute', left: 0, top: 0, bottom: 0, width: `${30 + i * 18}%`, background: G.goldBright}} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 760, textAlign: 'center', fontFamily: GF.cn, fontSize: 22, letterSpacing: 6, color: G.ivoryDim, opacity: clamp01((f - at - 20) / 20)}}>每一项都更便宜，加在一起却更贵</div>
+      <SourceNote>示意：四项账单为方向性示意，不是精确统计。</SourceNote>
+    </AbsoluteFill>
+  );
+};
+
+export const QueueScene: React.FC<{f: number; phase?: 'wide' | 'close'; at?: number}> = ({f, phase = 'wide', at = SHOTS.commuterBroll[0]}) => {
+  const p = clamp01((f - at) / 30);
+  const close = phase === 'close';
+  const s = close ? 2.05 : 1.7;
+  const tx = close ? -520 : -260;
+  return (
+    <AbsoluteFill>
+      <SceneLabel f={f} at={at} text="THE TURNSTILE · 2025" sub="门槛一低，进来的人就多了" />
+      <div style={{position: 'absolute', inset: 0, transform: `translateX(${tx}px) scale(${s})`, transformOrigin: '960px 560px'}}>
+        <svg width={1920} height={1080} style={{position: 'absolute'}}>
+          <defs><radialGradient id="queue-glow" cx="50%" cy="50%" r="50%"><stop offset="0" stopColor="#f3dca0" stopOpacity={0.2} /><stop offset="1" stopColor="#d6b46a" stopOpacity={0} /></radialGradient></defs>
+          <ellipse cx={960} cy={650} rx={520} ry={360} fill="url(#queue-glow)" />
+          <line x1={0} y1={700} x2={1920} y2={700} stroke={G.goldFaint} strokeWidth={1} strokeDasharray="16 18" />
+          <line x1={0} y1={760} x2={1920} y2={760} stroke={G.goldLine} strokeWidth={2} />
+          <line x1={0} y1={820} x2={1920} y2={820} stroke={G.goldFaint} strokeWidth={1} strokeDasharray="12 14" />
+          {[0, 1, 2].map((i) => (
+            <g key={i}>
+              <rect x={880 + i * 120} y={470} width={16} height={290} fill="rgba(24,18,10,0.96)" stroke={G.goldBright} />
+              <rect x={860 + i * 120} y={740} width={56} height={18} fill="rgba(24,18,10,0.96)" stroke={G.gold} />
+            </g>
+          ))}
+          <g transform={`rotate(${f * 0.08} 960 620)`}>
+            <line x1={960} y1={620} x2={960} y2={540} stroke={G.goldBright} strokeWidth={5} />
+            <line x1={960} y1={620} x2={1040} y2={620} stroke={G.goldBright} strokeWidth={5} />
+            <line x1={960} y1={620} x2={960} y2={700} stroke={G.goldBright} strokeWidth={5} />
+            <line x1={960} y1={620} x2={880} y2={620} stroke={G.goldBright} strokeWidth={5} />
+          </g>
+          <circle cx={960} cy={620} r={18} fill={G.bg} stroke={G.goldBright} strokeWidth={3} />
+          <rect x={1130} y={560} width={120} height={150} fill="rgba(24,18,10,0.96)" stroke={G.goldBright} />
+          <text x={1190} y={620} textAnchor="middle" fontFamily={GF.latin} fontSize={14} letterSpacing={3} fill={G.ivoryDim}>TAP</text>
+          <text x={1190} y={660} textAnchor="middle" fontFamily={GF.num} fontSize={34} fill={G.goldBright}>×{Math.floor(1 + p * 9)}</text>
+          {Array.from({length: 80}, (_, i) => {
+            const t = ((f * (0.0015 + rand(i + 900) * 0.002) + rand(i + 910)) % 1 + 1) % 1;
+            const y = 820 + rand(i + 920) * 40;
+            const x = 80 + t * 1720;
+            return <circle key={i} cx={x} cy={y} r={2 + rand(i + 930) * 4} fill={G.goldBright} opacity={0.25 + 0.55 * rand(i + 940)} />;
+          })}
+          {Array.from({length: 90}, (_, i) => {
+            const t = ((f * (0.0018 + rand(i + 950) * 0.002) + rand(i + 960)) % 1 + 1) % 1;
+            return <circle key={`q${i}`} cx={80 + t * 1760} cy={600 + rand(i + 970) * 70} r={2 + rand(i + 980) * 4} fill={G.ivory} opacity={0.15 + 0.45 * rand(i + 990)} />;
+          })}
+          <text x={1500} y={430} textAnchor="end" fontFamily={GF.num} fontSize={120} fill={G.goldBright} opacity={0.75}>×{Math.floor(1 + p * 9)}</text>
+          <text x={1500} y={480} textAnchor="end" fontFamily={GF.cn} fontSize={22} letterSpacing={6} fill={G.ivoryDim}>新的进入者</text>
+          <text x={210} y={470} fontFamily={GF.latinItalic} fontSize={24} fill={G.ivoryDim}>the turnstile effect</text>
+          {Array.from({length: 26}, (_, i) => {
+            const x = 120 + (i * 67 + f * 1.2) % 1700;
+            const h = 16 + rand(i + 1100) * 14;
+            return <g key={`p${i}`} opacity={0.35 + 0.4 * rand(i + 1110)}><circle cx={x} cy={640 - h} r={4 + rand(i + 1120) * 3} fill={G.goldBright} /><rect x={x - 3} y={642 - h} width={6} height={h} fill={G.ivory} opacity={0.7} /></g>;
+          })}
+          <path d="M 0 760 L 500 760 L 500 700 L 0 700 Z" fill="rgba(214,180,106,0.06)" />
+          <path d="M 1420 760 L 1920 760 L 1920 700 L 1420 700 Z" fill="rgba(214,180,106,0.06)" />
+        </svg>
+      </div>
+      <SourceNote>示意：闸机/人流用粒子与转杆表示，不是实拍。</SourceNote>
+    </AbsoluteFill>
+  );
+};
+
+export const HourglassScene: React.FC<{f: number; phase?: 'open' | 'close'; at?: number}> = ({f, phase = 'open', at = SHOTS.finaleHourglass[0]}) => {
+  const p = clamp01((f - at) / 40);
+  const close = phase === 'close';
+  const s = close ? 1.5 : 1;
+  return (
+    <AbsoluteFill>
+      <SceneLabel f={f} at={at} text="THE HOURGLASS · 2025" sub="省下来的时间，最后去了哪里" />
+      <div style={{position: 'absolute', inset: 0, transform: `scale(${s})`, transformOrigin: '960px 600px'}}>
+        <svg width={1920} height={1080} style={{position: 'absolute'}}>
+          <path d="M760 230 L1160 230 L1010 480 L1160 730 L760 730 L910 480 Z" fill="rgba(239,230,210,0.035)" stroke={G.goldBright} strokeWidth={2} />
+          <line x1={760} y1={230} x2={1160} y2={230} stroke={G.goldBright} strokeWidth={5} />
+          <line x1={760} y1={730} x2={1160} y2={730} stroke={G.goldBright} strokeWidth={5} />
+          <path d="M860 250 L1060 250 L960 460 Z" fill="rgba(214,180,106,0.1)" stroke={G.goldLine} />
+          <path d="M960 500 L1060 710 L860 710 Z" fill="rgba(214,180,106,0.14)" stroke={G.goldLine} />
+          <line x1={960} y1={460} x2={960} y2={510} stroke={G.goldBright} strokeWidth={2} strokeDasharray="4 6" />
+          {Array.from({length: 70}, (_, i) => {
+            const t = ((f * (0.002 + rand(i + 1000) * 0.002) + rand(i + 1010)) % 1 + 1) % 1;
+            const y = 280 + t * 300;
+            const x = 960 + Math.sin(i + f / 10) * (60 - t * 40);
+            return <circle key={i} cx={x} cy={y} r={1.6 + rand(i + 1020) * 2.6} fill={G.goldBright} opacity={0.4 + 0.5 * rand(i + 1030)} />;
+          })}
+          <path d={`M 845 700 Q 960 ${690 - p * 70} 1075 700 Z`} fill="rgba(214,180,106,0.22)" stroke={G.goldLine} />
+        </svg>
+      </div>
+      <div style={{position: 'absolute', right: 150, top: 300, width: 280, display: 'flex', flexDirection: 'column', gap: 18}}>
+        {Array.from({length: 6}, (_, i) => {
+          const o = clamp01((f - at - 10 - i * 8) / 12);
+          return <div key={i} style={{opacity: o, border: `1px solid ${G.goldFaint}`, background: 'rgba(214,180,106,0.04)', padding: '10px 14px', fontFamily: GF.cn, fontSize: 18, color: G.ivory}}>{['会', '排期', '消息', '评审', '报表', '复盘'][i]}</div>;
+        })}
+      </div>
+      {close ? (
+        <div style={{position: 'absolute', left: 120, top: 360, width: 430, opacity: clamp01((f - at) / 16)}}>
+          <div style={{fontFamily: GF.num, fontSize: 180, lineHeight: 1, ...goldText(0.6)}}>3h</div>
+          <div style={{fontFamily: GF.cn, fontSize: 30, letterSpacing: 6, color: G.ivory, marginTop: 4}}>被重新排满</div>
+          <div style={{fontFamily: GF.cn, fontSize: 22, lineHeight: 1.7, color: G.ivoryDim, marginTop: 18}}>最后都变成了<br />新的任务。</div>
+        </div>
+      ) : null}
+      <SourceNote>示意：沙漏与任务卡表示“省下的时间被新任务填满”，不是统计数据。</SourceNote>
     </AbsoluteFill>
   );
 };

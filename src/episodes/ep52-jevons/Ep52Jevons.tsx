@@ -3,7 +3,8 @@ import {AbsoluteFill, Audio, Sequence, staticFile, useCurrentFrame} from 'remoti
 import {clamp01} from '../../library/anim';
 import {Dust, GCaption, GildedBg, Smash} from '../../library/gilded/stage';
 import {G} from '../../library/gilded/theme';
-import {AdoptScene, AiScene, BookScene, CloudScene, CoalScene, ColdOpen, EndScene, EngineScene, FinaleScene, GateScene, GiantScene, LedScene, LoopScene, Modern2Scene, ModernScene, PriceScene, RoadScene, SplitScene, TimeScene, TitleScene, ValueScene, vis} from './scenes';
+import {AdoptScene, AiScene, BillMontageScene, BookScene, CloudScene, CoalScene, ColdOpen, EndScene, EngineScene, GateScene, GiantScene, HourglassScene, LedScene, LoopScene, Modern2Scene, ModernScene, PaperMountainScene, PriceScene, QueueScene, ReceiptRollScene, RoadScene, ScreenSplitScene, SplitScene, TimeScene, TitleScene, ValueScene, VersionDeckScene, vis} from './scenes';
+import {BrollLayer, BrollShot, DataHud} from './broll';
 import {CUES, cueEnd, cueStart, DARK_FROM, DARK_FROM2, DARK_FROM3, DARK_FROM4, DURATION, fb, FREEZE, HIT, HIT2, HIT3, HIT4, SFX, SHOTS} from './timeline';
 
 /**
@@ -69,6 +70,7 @@ export const Ep52Jevons: React.FC = () => {
       ) : null}
       <Dust f={f} n={58} />
       <AbsoluteFill style={{background: 'radial-gradient(ellipse 55% 50% at 50% 46%, rgba(214,180,106,0.05), rgba(0,0,0,0) 70%)', pointerEvents: 'none'}} />
+      <BrollLayer f={fs} />
 
       {/* 冷开场 */}
       {f < HIT ? <ColdOpen f={fs} /> : null}
@@ -100,20 +102,27 @@ export const Ep52Jevons: React.FC = () => {
       <Layer f={f} a={SHOTS.gate[0]} b={SHOTS.gate[1]}><GateScene f={fs} /></Layer>
 
       <Layer f={f} a={SHOTS.paperless[0]} b={SHOTS.paperless[1]}><Modern2Scene f={fs} focus="paper" at={SHOTS.paperless[0]} /></Layer>
+      <Layer f={f} a={SHOTS.paperMountain[0]} b={SHOTS.paperMountain[1]}><PaperMountainScene f={fs} /></Layer>
       <Layer f={f} a={SHOTS.bandwidth[0]} b={SHOTS.bandwidth[1]}><Modern2Scene f={fs} focus="band" at={SHOTS.bandwidth[0]} /></Layer>
-      <Layer f={f} a={SHOTS.office[0]} b={SHOTS.office[1]}><Modern2Scene f={fs} focus="office" at={SHOTS.office[0]} /></Layer>
+      <Layer f={f} a={SHOTS.screenSplit[0]} b={SHOTS.screenSplit[1]}><ScreenSplitScene f={fs} /></Layer>
+      <Layer f={f} a={SHOTS.officeBroll[0]} b={SHOTS.officeBroll[1]}><BrollShot f={fs} kind="office" at={SHOTS.officeBroll[0]} title="B-ROLL · COPY ROOM" stat="×2" sub="打印、复印、扫描" /></Layer>
+      <Layer f={f} a={SHOTS.versionDeck[0]} b={SHOTS.versionDeck[1]}><VersionDeckScene f={fs} /></Layer>
       <Layer f={f} a={SHOTS.montage2[0]} b={SHOTS.montage2[1]}><Modern2Scene f={fs} focus="all" at={SHOTS.montage2[0]} /></Layer>
 
       <Layer f={f} a={SHOTS.valueBand[0]} b={SHOTS.valueBand[1]}><ValueScene f={fs} focus="band" at={SHOTS.valueBand[0]} /></Layer>
       <Layer f={f} a={SHOTS.valueAI[0]} b={SHOTS.valueAI[1]}><ValueScene f={fs} focus="ai" at={SHOTS.valueAI[0]} /></Layer>
 
       <Layer f={f} a={SHOTS.timeClock[0]} b={SHOTS.timeClock[1]}><TimeScene f={fs} phase="clock" at={SHOTS.timeClock[0]} /></Layer>
+      <Layer f={f} a={SHOTS.hourglassTime[0]} b={SHOTS.hourglassTime[1]}><HourglassScene f={fs} phase="open" at={SHOTS.hourglassTime[0]} /></Layer>
       <Layer f={f} a={SHOTS.timeTasks[0]} b={SHOTS.timeTasks[1]}><TimeScene f={fs} phase="tasks" at={SHOTS.timeTasks[0]} /></Layer>
+      <Layer f={f} a={SHOTS.serverBroll[0]} b={SHOTS.serverBroll[1]}><BrollShot f={fs} kind="server" at={SHOTS.serverBroll[0]} title="B-ROLL · SERVER ROOM" stat="×10" sub="每一次调用，都要电" /></Layer>
       <Layer f={f} a={SHOTS.timeBill[0]} b={SHOTS.timeBill[1]}><TimeScene f={fs} phase="bill" at={SHOTS.timeBill[0]} /></Layer>
-      <Layer f={f} a={SHOTS.timeClose[0]} b={SHOTS.preHit3[1]}><TimeScene f={fs} phase="close" at={SHOTS.timeBill[0]} /></Layer>
+      <Layer f={f} a={SHOTS.timeClose[0]} b={SHOTS.timeClose[1]}><TimeScene f={fs} phase="close" at={SHOTS.timeBill[0]} /></Layer>
+      <Layer f={f} a={SHOTS.receiptRoll[0]} b={SHOTS.receiptRoll[1]}><ReceiptRollScene f={fs} /></Layer>
+      <Layer f={f} a={SHOTS.preHit3[0]} b={SHOTS.preHit3[1]}><TimeScene f={fs} phase="close" at={SHOTS.timeBill[0]} /></Layer>
 
-      {f >= HIT3 && f < HIT4 ? (
-        <AbsoluteFill style={{opacity: 1 - clamp01((f - (HIT4 - 20)) / 20)}}>
+      {f >= HIT3 && f < SHOTS.hit3[1] ? (
+        <AbsoluteFill style={{opacity: 1 - clamp01((f - (SHOTS.hit3[1] - 16)) / 16)}}>
           <Smash f={f} at={HIT3} text="总账单" size={180} sub="THE BILL · 越省越多" ring={1300} flash={1} y={450} />
         </AbsoluteFill>
       ) : null}
@@ -124,10 +133,16 @@ export const Ep52Jevons: React.FC = () => {
         </AbsoluteFill>
       ) : null}
 
-      <Layer f={f} a={SHOTS.finaleGate[0]} b={SHOTS.finaleGate[1]}><FinaleScene f={fs} phase="gate" at={SHOTS.finaleGate[0]} /></Layer>
-      <Layer f={f} a={SHOTS.finaleClock[0]} b={SHOTS.finaleClock[1]}><FinaleScene f={fs} phase="clock" at={SHOTS.finaleClock[0]} /></Layer>
+      <Layer f={f} a={SHOTS.tollBroll[0]} b={SHOTS.tollBroll[1]}><BrollShot f={fs} kind="toll" at={SHOTS.tollBroll[0]} title="B-ROLL · TOLL PLAZA" stat="×3.1" sub="路更宽，车更多" /></Layer>
+      <Layer f={f} a={SHOTS.billMontage[0]} b={SHOTS.billMontage[1]}><BillMontageScene f={fs} /></Layer>
+      <Layer f={f} a={SHOTS.commuterBroll[0]} b={SHOTS.commuterBroll[1]}><BrollShot f={fs} kind="commuter" at={SHOTS.commuterBroll[0]} title="B-ROLL · STATION" stat="×10" sub="早高峰，进站" /></Layer>
+      <Layer f={f} a={SHOTS.finaleQueueClose[0]} b={SHOTS.finaleQueueClose[1]}><QueueScene f={fs} phase="close" at={SHOTS.finaleQueueClose[0]} /></Layer>
+      <Layer f={f} a={SHOTS.finaleHourglass[0]} b={SHOTS.finaleHourglass[1]}><HourglassScene f={fs} phase="open" at={SHOTS.finaleHourglass[0]} /></Layer>
+      <Layer f={f} a={SHOTS.finaleHourglassClose[0]} b={SHOTS.finaleHourglassClose[1]}><HourglassScene f={fs} phase="close" at={SHOTS.finaleHourglassClose[0]} /></Layer>
       <Layer f={f} a={SHOTS.endTitle[0]} b={SHOTS.endTitle[1]} fin={12} fout={4}><EndScene f={fs} phase="title" at={SHOTS.endTitle[0]} /></Layer>
       <Layer f={f} a={SHOTS.endQuestion[0]} b={DURATION} fin={8} fout={1}><EndScene f={fs} phase="question" at={SHOTS.endQuestion[0]} /></Layer>
+
+      <DataHud f={fs} />
 
       <AbsoluteFill style={{background: '#000', opacity: dark, pointerEvents: 'none'}} />
 
