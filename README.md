@@ -131,11 +131,12 @@ npm run export -- ep00-demo    # render into the folder printed by: bash scripts
 
 ## Workflow Skills
 
-`.claude/skills/` contains eight Claude Code skills. Open the project in Claude Code and describe what you want; the matching skill is picked up automatically.
+`.claude/skills/` contains nine Claude Code skills. Open the project in Claude Code and describe what you want; the matching skill is picked up automatically.
 
 | Skill | What it does | Delivery | Sample |
 |---|---|---|---|
 | `weilanx-creator-distill-video` | Breaks reference videos down shot by shot (cuts, keyframes, palette, motion strips, beats) and distills their visual grammar into a new reusable style kit under `src/library/`, with a preview composition and a recipe card | Kit + preview + recipe card | `gilded/`, `tactical/`, `lamplight/`, `blackgold/` |
+| `weilanx-creator-reference-replica` | Reference video → 2D replica: shot analysis, rewritten script, beat-mapped timeline, 2D visuals, self-check, export, cover, post copy, report | **One-shot** | `ep52` |
 | `weilanx-creator-blackgold-video` | Black-gold glow short on a game-theory or counter-intuitive model, no voice-over, bilingual captions | **One-shot**: video, 3:4 cover, post copy, bilingual subtitles | `ep36` |
 | `weilanx-creator-fps-video` | Tactical-HUD explainer on why something feels bad in FPS games, no voice-over | **One-shot**: video, 3:4 cover, post copy, subtitle doc | `ep25`, `ep29`… |
 | `weilanx-creator-lamplight-video` | Lamplight history short on an ancient Chinese rule or custom, no voice-over | Script and beat sheet first, then one run to the video | `ep28`, `ep30`… |

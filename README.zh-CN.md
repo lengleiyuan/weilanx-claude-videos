@@ -131,11 +131,12 @@ npm run export -- ep00-demo    # 导出到 bash scripts/ep-dir.sh ep00-demo out 
 
 ## 工作流 Skill
 
-`.claude/skills/` 里有八个 Claude Code Skill。用 Claude Code 打开工程，直接说你想做什么，对应的 Skill 会自动被调用。
+`.claude/skills/` 里有九个 Claude Code Skill。用 Claude Code 打开工程，直接说你想做什么，对应的 Skill 会自动被调用。
 
 | Skill | 作用 | 交付方式 | 样片 |
 |---|---|---|---|
 | `weilanx-creator-distill-video` | 把参考视频逐镜头拆解（硬切、关键帧、色板、动效切片、卡点），蒸馏出画面语法，写成 `src/library/` 下一套新的风格素材包，附预览作品和配方卡 | 素材包 + 预览 + 配方卡 | `gilded/`、`tactical/`、`lamplight/`、`blackgold/` |
+| `weilanx-creator-reference-replica` | 给一条参考视频 → 2D 复刻成片：拆片、重写文案、测拍排时间表、2D 画面、自检、导出、封面、发布文案、报告 | **一锅出** | `ep52` |
 | `weilanx-creator-blackgold-video` | 黑金光影风知识短片：讲博弈论或一个反直觉模型，无口播、中英字幕 | **一锅出**：成片、3:4 封面、发布文案、双语字幕稿 | `ep36` |
 | `weilanx-creator-fps-video` | 战术屏科普风：讲 FPS 游戏里某个挫败瞬间背后的原理，无口播 | **一锅出**：成片、3:4 封面、发布文案、字幕稿 | `ep25`、`ep29`… |
 | `weilanx-creator-lamplight-video` | 灯火史话风：讲一条中国古代制度或冷知识，无口播 | 先出文案与卡点稿，确认后一口气出片 | `ep28`、`ep30`… |
