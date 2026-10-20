@@ -8,9 +8,9 @@ import {fileURLToPath} from 'node:url';
 import {cutMusic} from '../music.mjs';
 
 const EP = 'ep52-jevons';
-const DURATION = 125;
+const DURATION = 300;
 
-if (cutMusic({track: 'jevons-ref', start: 0, duration: DURATION, ep: EP, fadeIn: 0.02, fadeOut: 2})) {
+if (cutMusic({track: 'jevons-ref', start: 0, duration: DURATION, ep: EP, fadeIn: 0.02, fadeOut: 3})) {
   const dir = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'public', 'audio', EP);
   const ff = (args) => execFileSync('ffmpeg', ['-v', 'error', '-y', ...args]);
 

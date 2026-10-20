@@ -1,9 +1,9 @@
 /**
- * ep52 杰文斯悖论：越省越多（暗金文献风，无口播，2 分 05 秒，配乐从参考样片提取的 0–125 秒）。
+ * ep52 杰文斯悖论：越省越多（暗金文献风，无口播，5 分钟完整版，配乐从参考样片提取的 0–300 秒）。
  *
  * 音乐实测：0.01 秒起音，112.8 BPM，一小节 2.1278 秒。
- * 第 4 小节 8.52 秒是片头重拍（标题砸出）；第 40 小节 85.12 秒是回落段之后整段重新进来的大重拍（锚词「越省越多」）。
- * 68–85 秒是配乐回落段，正好留给「现代案例」；85 秒之后进入第二幕。
+ * 第 4 小节 8.52 秒片头重拍；第 40 小节 85.12 秒第一次大重拍（锚词「越省越多」）；
+ * 第 111 小节附近 236.04 秒、第 118 小节附近 251.02 秒是第二、第三个大重拍（「总账单」「门槛」）。
  *
  * 叙事：四个日常悖论 → 1865 杰文斯《煤炭问题》→ 瓦特省煤 2/3，英国煤耗反而涨十倍
  * → 省煤 = 燃料降价 → 需求扩张 → 反弹效应 → LED / 高速 / 云计算 / DeepSeek
@@ -27,15 +27,20 @@ export const fbt = (b: number) => fb(b / 4);
 /** 片头标题重拍（第 4 小节）和锚词大重拍（第 40 小节） */
 export const HIT = fb(4);
 export const HIT2 = fb(40);
+export const HIT3 = fr(236.04);
+export const HIT4 = fr(251.02);
 /** 重拍前约 0.75 秒收暗，最后 3 帧静止 */
 export const DARK_FROM = fr(barSec(4) - 0.78);
 export const DARK_FROM2 = fr(barSec(40) - 0.78);
+export const DARK_FROM3 = fr(235.3);
+export const DARK_FROM4 = fr(250.3);
 export const FREEZE = 3;
 
-/** 125 秒 = 第 58.75 小节；最后 1 秒淡黑 */
-export const DURATION = fr(125);
+/** 300 秒 = 第 141 小节；最后 1 秒淡黑 */
+export const DURATION = fr(300);
 
 export const ANCHOR = '越省越多';
+export const FINAL_QUESTION = '你省下来的时间，去了哪里？';
 export const TERM = '杰文斯悖论 · Jevons Paradox';
 export const TERM2 = '反弹效应 · Rebound Effect';
 
@@ -79,13 +84,51 @@ export const CUES: [number, string, string][] = [
   [51, '它们只做一件事：把单价打穿。', 'They all did one thing: break the unit price.'],
   [52, '让奢侈品，变成日用品。', 'Turn luxury into a daily necessity.'],
   [53, '【越省越多】，不是故障，是默认设置。', 'More from less isn’t a glitch. It’s the default.'],
-  [55, '省，不是变少；省，是把门槛降低。', 'Saving isn’t less. It lowers the gate.'],
-  [56, '你省下来的时间，去了哪里？', 'Where did your saved time go?'],
+  [55, '可这套默认设置，不只发生在煤和 AI 身上。', 'But this default isn’t only about coal and AI.'],
+  // 第二幕·补：无纸化 / 带宽 / 办公软件
+  [57, '无纸化办公喊了二十年，用纸翻了三倍。', 'Twenty years paperless — three times the paper.'],
+  [59, '屏幕越多，打印越多。', 'More screens, more printing.'],
+  [61, '网速快了一百倍，网页变成 4K 视频。', 'A hundred times the bandwidth; pages became 4K video.'],
+  [63, '省下的流量，被更高的画质吃掉。', 'The saved bandwidth was eaten by higher resolution.'],
+  [65, '办公软件让一份文件改两遍就定稿；', 'Office software: two revisions and done.'],
+  [67, 'AI 让一下午出十版方案。', 'AI: ten versions in one afternoon.'],
+  [69, '职场及格线，被重新改写。', 'The workplace pass line was rewritten.'],
+  [71, '云更便宜，企业存下每一次点击。', 'Cheaper cloud stored every click.'],
+  [73, '单价跌了，总账单翻了几倍。', 'Unit prices fell; the bill multiplied.'],
+  [75, '每一次效率提升，都在重演同一个剧本。', 'Every efficiency gain repeats the same script.'],
+  // 第三幕：价值迁徙 / 时间 / 总账单
+  [77, '价值没有消失，它在【迁徙】。', 'Value didn’t vanish. It migrated.'],
+  [79, '带宽便宜，注意力最值钱。', 'Cheap bandwidth makes attention precious.'],
+  [81, 'AI 便宜了，能源、数据和判断力最值钱。', 'Cheap AI makes energy, data and taste precious.'],
+  [83, '技术只负责效率，从不承诺空闲。', 'Technology delivers efficiency, never free time.'],
+  [85, '你不划定边界，省下的时间被排期填满。', 'Without boundaries, saved time fills with more work.'],
+  [87, '省下来的时间，从来不属于个人。', 'The time you save never belongs to you.'],
+  [89, '这不是技术故障，是系统的默认设置。', 'This isn’t a glitch. It’s the system default.'],
+  [91, '1865 年，杰文斯担心煤会用完。', 'In 1865, Jevons feared coal would run out.'],
+  [93, '他没想到，真正的问题是：省下的去哪了？', 'The real question: where did the savings go?'],
+  [95, '从煤到 AI，问题没有变。', 'From coal to AI, the question is the same.'],
+  [97, '每一次效率提升，都会把门槛降低一次。', 'Every efficiency gain lowers the gate.'],
+  [99, '门槛一低，进来的人就多了。', 'Lower the gate, and more people walk in.'],
+  [101, '所以总账单，从来没有省掉。', 'So the total bill was never saved.'],
+  [103, '省下来的，最后都变成了新的标准。', 'What you save becomes the new standard.'],
+  [105, '更高的画质、更快的响应、更多的方案。', 'Higher resolution, faster response, more options.'],
+  [107, '你以为在省钱，系统在扩大分母。', 'You think you’re saving; the system expands the denominator.'],
+  [109, '越省越多，不是口号，是一张账单。', 'More from less isn’t a slogan. It’s a bill.'],
+  [110, '把每一笔省下来的，都记到总账上。', 'Every saving gets added to the total bill.'],
+  // 第三幕：第二、第三个重拍
+  [113, '没有谁靠替客户省总预算成功。', 'No giant won by shrinking the total bill.'],
+  [115, '它们只是把单价打穿，换更大的规模。', 'They break the unit price to buy scale.'],
+  [116, '让奢侈品，变成日用品。', 'Turn luxury into a daily necessity.'],
+  [117, '省，不是变少；省，是把门槛降低。', 'Saving isn’t less. It lowers the gate.'],
+  [119, '门槛一低，进来的人就多了。', 'Lower the gate, and more walk in.'],
+  [121, '1865 年，杰文斯怕煤挖完；', 'In 1865, Jevons feared the mines would empty.'],
+  [123, '今天，我们怕的是：时间被谁拿走了。', 'Today we fear: who took the time we saved?'],
+  [125, '把省下来的时间，还给自己。', 'Give the time you saved back to yourself.'],
 ];
 export const cueStart = (i: number) => fb(CUES[i][0]);
 export const cueEnd = (i: number) => (i + 1 < CUES.length ? cueStart(i + 1) : DURATION);
 /** 片头重拍前那句和锚词前那句：随收暗一起退场，把画面留给大字 */
-export const HALF_BARS = [3, 38];
+export const HALF_BARS = [3, 38, 110, 117];
 
 /** 镜头段落，首尾相接；每个段落自己按小节算元素出场 */
 export const SHOTS = {
@@ -106,7 +149,12 @@ export const SHOTS = {
   ai: [fb(45), fb(49)], // AI 接进每张表格：调用量爆炸
   giant: [fb(49), fb(53)], // 没有巨头靠省总预算成功：打穿单价
   gate: [fb(53), fb(57)], // 门槛降低：越省越多；重新定义锚词
-  end: [fb(57), DURATION], // 结尾问题
+  modern2: [fb(57), fb(75)], // 无纸化 / 带宽 / 办公软件
+  value: [fb(75), fb(89)], // 价值迁徙
+  time: [fb(89), HIT3], // 时间 / 边界 / 总账单
+  hit3: [HIT3, HIT4], // 第二个大重拍：总账单
+  finale: [HIT4, fb(132)], // 第三个重拍：门槛；重新定义锚词
+  end: [fb(132), DURATION], // 结尾问题
 } as const;
 
 /* ---------------- 片中的事实与数字（测试核对） ---------------- */
@@ -150,10 +198,17 @@ const s = (name: string, at: number, v: number): [string, number, number] => [`$
 export const SFX: [string, number, number][] = [
   s('impact', HIT, 0.5),
   s('impact', HIT2, 0.55),
+  s('impact', HIT3, 0.55),
+  s('impact', HIT4, 0.5),
   s('riser', fr(barSec(40) - 2.0), 0.28),
+  s('riser', fr(235.3 - 2.0), 0.28),
+  s('riser', fr(250.3 - 2.0), 0.28),
   s('chime', fb(13), 0.3),
   s('chime', fb(41), 0.28),
   s('chime', fb(47), 0.26),
   s('impact', fb(51), 0.28),
   s('chime', fb(53), 0.32),
+  s('chime', fb(75), 0.28),
+  s('chime', fb(101), 0.3),
+  s('chime', fb(119), 0.32),
 ];

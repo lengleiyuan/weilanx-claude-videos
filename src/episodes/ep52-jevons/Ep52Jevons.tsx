@@ -3,8 +3,8 @@ import {AbsoluteFill, Audio, Sequence, staticFile, useCurrentFrame} from 'remoti
 import {clamp01} from '../../library/anim';
 import {Dust, GCaption, GildedBg, Smash} from '../../library/gilded/stage';
 import {G} from '../../library/gilded/theme';
-import {AdoptScene, AiScene, BookScene, CloudScene, CoalScene, ColdOpen, EndScene, EngineScene, GateScene, GiantScene, LedScene, LoopScene, ModernScene, PriceScene, RoadScene, SplitScene, TitleScene, vis} from './scenes';
-import {CUES, cueEnd, cueStart, DARK_FROM, DARK_FROM2, DURATION, fb, FREEZE, HALF_BARS, HIT, HIT2, SFX, SHOTS} from './timeline';
+import {AdoptScene, AiScene, BookScene, CloudScene, CoalScene, ColdOpen, EndScene, EngineScene, FinaleScene, GateScene, GiantScene, LedScene, LoopScene, Modern2Scene, ModernScene, PriceScene, RoadScene, SplitScene, TimeScene, TitleScene, ValueScene, vis} from './scenes';
+import {CUES, cueEnd, cueStart, DARK_FROM, DARK_FROM2, DARK_FROM3, DARK_FROM4, DURATION, fb, FREEZE, HIT, HIT2, HIT3, HIT4, SFX, SHOTS} from './timeline';
 
 /**
  * ep52 杰文斯悖论：越省越多（暗金文献风，无口播，2 分 05 秒）。
@@ -41,11 +41,13 @@ const Layer: React.FC<{f: number; a: number; b: number; children: React.ReactNod
 export const Ep52Jevons: React.FC = () => {
   const f = useCurrentFrame();
   // 重拍前最后 3 帧画面静止：场景和字幕都读这个冻结帧
-  const fs = f >= HIT && f < HIT + 1 ? f : f < HIT && f >= HIT - FREEZE ? HIT - FREEZE : f < HIT2 && f >= HIT2 - FREEZE ? HIT2 - FREEZE : f;
+  const fs = f < HIT && f >= HIT - FREEZE ? HIT - FREEZE : f < HIT2 && f >= HIT2 - FREEZE ? HIT2 - FREEZE : f < HIT3 && f >= HIT3 - FREEZE ? HIT3 - FREEZE : f < HIT4 && f >= HIT4 - FREEZE ? HIT4 - FREEZE : f;
 
   const dark1 = f >= HIT ? 0 : Math.pow(clamp01((f - DARK_FROM) / (HIT - FREEZE - DARK_FROM)), 0.7) * 0.94;
   const dark2 = f >= HIT2 || f < DARK_FROM2 ? 0 : Math.pow(clamp01((f - DARK_FROM2) / (HIT2 - FREEZE - DARK_FROM2)), 0.7) * 0.94;
-  const dark = Math.max(dark1, dark2);
+  const dark3 = f >= HIT3 || f < DARK_FROM3 ? 0 : Math.pow(clamp01((f - DARK_FROM3) / (HIT3 - FREEZE - DARK_FROM3)), 0.7) * 0.94;
+  const dark4 = f >= HIT4 || f < DARK_FROM4 ? 0 : Math.pow(clamp01((f - DARK_FROM4) / (HIT4 - FREEZE - DARK_FROM4)), 0.7) * 0.94;
+  const dark = Math.max(dark1, dark2, dark3, dark4);
 
   // 现代案例段落稍微转冷，和 1865 的暖金拉开一点距离
   const cool = vis(f, fb(32), HIT2 + 6, 30, 30);
@@ -96,6 +98,24 @@ export const Ep52Jevons: React.FC = () => {
       <Layer f={f} a={SHOTS.ai[0]} b={SHOTS.ai[1]}><AiScene f={fs} /></Layer>
       <Layer f={f} a={SHOTS.giant[0]} b={SHOTS.giant[1]}><GiantScene f={fs} /></Layer>
       <Layer f={f} a={SHOTS.gate[0]} b={SHOTS.gate[1]}><GateScene f={fs} /></Layer>
+
+      <Layer f={f} a={SHOTS.modern2[0]} b={SHOTS.modern2[1]}><Modern2Scene f={fs} /></Layer>
+      <Layer f={f} a={SHOTS.value[0]} b={SHOTS.value[1]}><ValueScene f={fs} /></Layer>
+      <Layer f={f} a={SHOTS.time[0]} b={SHOTS.time[1]}><TimeScene f={fs} /></Layer>
+
+      {f >= HIT3 && f < HIT4 ? (
+        <AbsoluteFill style={{opacity: 1 - clamp01((f - (HIT4 - 20)) / 20)}}>
+          <Smash f={f} at={HIT3} text="总账单" size={180} sub="THE BILL · 越省越多" ring={1300} flash={1} y={450} />
+        </AbsoluteFill>
+      ) : null}
+
+      {f >= HIT4 && f < HIT4 + 38 ? (
+        <AbsoluteFill style={{opacity: 1 - clamp01((f - (HIT4 + 18)) / 18)}}>
+          <Smash f={f} at={HIT4} text="门槛" size={180} sub="省，不是变少" ring={1250} flash={1} y={450} />
+        </AbsoluteFill>
+      ) : null}
+
+      <Layer f={f} a={SHOTS.finale[0]} b={SHOTS.finale[1]}><FinaleScene f={fs} /></Layer>
       <Layer f={f} a={SHOTS.end[0]} b={DURATION} fin={20} fout={1}><EndScene f={fs} /></Layer>
 
       <AbsoluteFill style={{background: '#000', opacity: dark, pointerEvents: 'none'}} />
@@ -104,7 +124,8 @@ export const Ep52Jevons: React.FC = () => {
         const at = cueStart(i);
         if (f < at - 2) return null;
         if (bar === 56) return null; // 结尾的大问题由 EndScene 自己画，避免和字幕重复
-        const out = bar === HALF_BARS[0] ? DARK_FROM : bar === HALF_BARS[1] ? DARK_FROM2 : cueEnd(i) - 12;
+        const halfOut: Record<number, number> = {3: DARK_FROM, 38: DARK_FROM2, 110: DARK_FROM3, 117: DARK_FROM4};
+        const out = bar === 125 ? SHOTS.end[0] - 4 : halfOut[bar] ?? cueEnd(i) - 12;
         if (f > out + 14) return null;
         const text = bar === 53 ? '不是故障，是默认设置。' : zh;
         const english = bar === 53 ? 'It’s the default.' : en;

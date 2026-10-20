@@ -5,10 +5,13 @@ import {
   CUES,
   DURATION,
   FACTS,
+  FINAL_QUESTION,
   FPS,
   HALF_BARS,
   HIT,
   HIT2,
+  HIT3,
+  HIT4,
   NVDA_DROP_PCT,
   NVDA_LOSS_B,
   PRICE_RATIO,
@@ -26,12 +29,14 @@ const zhLen = (s: string) => s.replace(/[【】\s]/g, '').replace(/[，。；：
 describe('ep52 杰文斯悖论', () => {
   it('片长和两个重拍落在实测拍点上', () => {
     expect(FPS).toBe(30);
-    expect(DURATION).toBe(fr(125));
+    expect(DURATION).toBe(fr(300));
     // 8.52 秒 / 85.12 秒，允许 2 帧误差
     expect(Math.abs(HIT - 256)).toBeLessThanOrEqual(2);
     expect(Math.abs(HIT2 - 2554)).toBeLessThanOrEqual(2);
     expect(HIT).toBe(fb(4));
     expect(HIT2).toBe(fb(40));
+    expect(Math.abs(HIT3 - 7081)).toBeLessThanOrEqual(2);
+    expect(Math.abs(HIT4 - 7531)).toBeLessThanOrEqual(2);
   });
 
   it('字幕按小节递增、在片长内、中文不超过 18 字、英文不为空', () => {
@@ -51,7 +56,8 @@ describe('ep52 杰文斯悖论', () => {
   it('锚词出现、结尾抛问题、重拍前一句说一半', () => {
     const text = CUES.map(([, zh]) => zh).join('');
     expect(text).toContain(ANCHOR);
-    expect(CUES[CUES.length - 1][1].endsWith('？')).toBe(true);
+    expect(CUES[CUES.length - 1][1].includes('时间')).toBe(true);
+    expect(FINAL_QUESTION.endsWith('？')).toBe(true);
     for (const bar of HALF_BARS) {
       const i = CUES.findIndex(([b]) => b === bar);
       expect(i).toBeGreaterThanOrEqual(0);
