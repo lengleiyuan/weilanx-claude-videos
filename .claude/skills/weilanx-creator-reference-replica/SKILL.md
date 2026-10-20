@@ -40,7 +40,15 @@ description: 「给一条参考视频 → 直接跑完整套 2D 复刻成片」�
 
 ## 2. 第 1 步：机器拆一遍
 
-先建分析目录，跑下面这些命令（把 `<VIDEO>` 换成实际路径）：
+快捷方式：先跑脚本，它会做 probe、抽音轨、每 5 秒抽帧、联系表、字幕条、切点、响度、卡点：
+
+```sh
+bash .claude/skills/weilanx-creator-reference-replica/scripts/analyze-reference.sh <VIDEO> analysis
+# 没有 uv 时：
+PYTHON=/path/to/python bash .claude/skills/weilanx-creator-reference-replica/scripts/analyze-reference.sh <VIDEO> analysis
+```
+
+脚本只做机器层；人眼拆解仍然按第 2 节做。也可以手动跑下面这些命令（把 `<VIDEO>` 换成实际路径）：
 
 ```sh
 mkdir -p analysis/frames analysis/audio
