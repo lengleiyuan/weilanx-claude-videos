@@ -1,3 +1,7 @@
+> fork：<https://github.com/lengleiyuan/weilanx-claude-videos>  
+> 分支：`feat/three-stage`  
+> 对照上游：<https://github.com/Azure12355/weilanx-claude-videos>
+
 # 3D 舞台 PoC（Three.js / React Three Fiber）
 
 这个分支在原来的 Remotion 工程上加了一层 **可复用的 3D 舞台**。目标不是把整期视频重做成 3D，而是先把“3D 能力”做成一个可验证的模块：一个 `ThreeCanvas` 舞台、一套暖金灯光、一组低多边形道具，以及一个 8.5 秒的蒸汽机 PoC 镜头。
