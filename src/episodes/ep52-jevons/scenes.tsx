@@ -1136,9 +1136,9 @@ export const GateScene: React.FC<{f: number}> = ({f}) => {
 
 /* ---------------- 结尾 ---------------- */
 
-export const EndScene: React.FC<{f: number}> = ({f}) => {
-  const at = SHOTS.end[0];
+export const EndScene: React.FC<{f: number; phase?: 'title' | 'question'; at?: number}> = ({f, phase = 'title', at = SHOTS.endTitle[0]}) => {
   const o = clamp01((f - at) / 26);
+  const q = phase === 'question' ? clamp01((f - at) / 20) : 0;
   const pulse = 0.7 + 0.3 * Math.sin(f / 12);
   return (
     <AbsoluteFill>
@@ -1148,39 +1148,45 @@ export const EndScene: React.FC<{f: number}> = ({f}) => {
         <circle cx={960} cy={540} r={4} fill={G.goldBright} style={{filter: `drop-shadow(0 0 18px ${G.goldBright})`}} opacity={o} />
       </svg>
       <div style={{position: 'absolute', left: 0, right: 0, top: 315, textAlign: 'center', opacity: o, transform: `translateY(${(1 - o) * 16}px)`}}>
-        <span style={{fontFamily: GF.cn, fontWeight: 900, fontSize: 150, letterSpacing: 22, filter: 'drop-shadow(0 0 34px rgba(243,220,160,0.32))', ...goldText(1)}}>越省越多</span>
+        <span style={{fontFamily: GF.cn, fontWeight: 900, fontSize: 150, letterSpacing: 22, filter: 'drop-shadow(0 0 34px rgba(243,220,160,0.32))', opacity: phase === 'title' ? 1 : 0.55, ...goldText(1)}}>越省越多</span>
       </div>
-      <div style={{position: 'absolute', left: 0, right: 0, top: 512, textAlign: 'center', fontFamily: GF.latin, fontSize: 22, letterSpacing: 14, color: G.ivoryDim, opacity: o}}>THE JEVONS PARADOX</div>
-      <div style={{position: 'absolute', left: 0, right: 0, top: 620, textAlign: 'center', fontFamily: GF.cn, fontSize: 42, letterSpacing: 4, color: G.ivory, opacity: clamp01((f - at - 18) / 20)}}>{FINAL_QUESTION}</div>
-      <div style={{position: 'absolute', left: 0, right: 0, top: 684, textAlign: 'center', fontFamily: GF.latinItalic, fontSize: 25, color: G.ivoryDim, opacity: clamp01((f - at - 24) / 20)}}>Where did your saved time go?</div>
-      <div style={{position: 'absolute', left: 0, right: 0, top: 754, textAlign: 'center', fontFamily: GF.cn, fontSize: 20, letterSpacing: 6, color: G.ivoryDim, opacity: clamp01((f - at - 40) / 24)}}>评论区聊聊</div>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 512, textAlign: 'center', fontFamily: GF.latin, fontSize: 22, letterSpacing: 14, color: G.ivoryDim, opacity: o * (phase === 'title' ? 1 : 0.5)}}>THE JEVONS PARADOX</div>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 620, textAlign: 'center', fontFamily: GF.cn, fontSize: 42, letterSpacing: 4, color: G.ivory, opacity: q}}>{FINAL_QUESTION}</div>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 684, textAlign: 'center', fontFamily: GF.latinItalic, fontSize: 25, color: G.ivoryDim, opacity: q * 0.9}}>Where did your saved time go?</div>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 754, textAlign: 'center', fontFamily: GF.cn, fontSize: 20, letterSpacing: 6, color: G.ivoryDim, opacity: q}}>评论区聊聊</div>
     </AbsoluteFill>
   );
 };
 
 /* ---------------- 5 分钟版：无纸化 / 带宽 / 办公软件 ---------------- */
 
-const MiniPanel: React.FC<{x: number; y: number; w?: number; h?: number; label: string; stat: string; active: number; children: React.ReactNode}> = ({x, y, w = 470, h = 500, label, stat, active, children}) => (
-  <div style={{position: 'absolute', left: x, top: y, width: w, height: h, opacity: 0.35 + 0.65 * active, border: `1px solid ${active > 0.5 ? G.goldLine : G.goldFaint}`, background: 'linear-gradient(160deg, rgba(34,24,12,0.82), rgba(3,3,3,0.3))', boxShadow: active > 0.5 ? 'inset 0 0 70px rgba(214,180,106,0.06)' : undefined}}>
+const MiniPanel: React.FC<{x: number; y: number; w?: number; h?: number; s?: number; label: string; stat: string; active: number; children: React.ReactNode}> = ({x, y, w = 470, h = 500, s = 1, label, stat, active, children}) => (
+  <div style={{position: 'absolute', left: x, top: y, width: w, height: h, transform: `scale(${s})`, transformOrigin: '50% 50%', opacity: 0.35 + 0.65 * active, border: `1px solid ${active > 0.5 ? G.goldLine : G.goldFaint}`, background: 'linear-gradient(160deg, rgba(34,24,12,0.82), rgba(3,3,3,0.3))', boxShadow: active > 0.5 ? 'inset 0 0 70px rgba(214,180,106,0.06)' : undefined}}>
     <div style={{position: 'absolute', left: 26, top: 22, fontFamily: GF.cn, fontSize: 19, letterSpacing: 5, color: G.ivoryDim}}>{label}</div>
     <div style={{position: 'absolute', left: 26, bottom: 28, fontFamily: GF.num, fontSize: 76, lineHeight: 1, ...goldText(active > 0.5 ? 0.65 : 0.2)}}>{stat}</div>
     <div style={{position: 'absolute', left: 26, right: 26, top: 70, bottom: 120}}>{children}</div>
   </div>
 );
 
-export const Modern2Scene: React.FC<{f: number}> = ({f}) => {
-  const at = SHOTS.modern2[0];
-  const paper = clamp01((f - fb(57)) / 12);
-  const band = clamp01((f - fb(61)) / 12);
-  const office = clamp01((f - fb(65)) / 12);
-  const all = clamp01((f - fb(69)) / 12);
+export const Modern2Scene: React.FC<{f: number; focus?: 'paper' | 'band' | 'office' | 'all'; at?: number}> = ({f, focus = 'all', at = SHOTS.paperless[0]}) => {
+  const pOn = clamp01((f - fb(57)) / 12);
+  const bOn = clamp01((f - fb(61)) / 12);
+  const oOn = clamp01((f - fb(65)) / 12);
+  const aOn = clamp01((f - fb(69)) / 12);
+  const paper = focus === 'paper' ? 1 : focus === 'all' ? Math.max(pOn, aOn) : 0.22;
+  const band = focus === 'band' ? 1 : focus === 'all' ? Math.max(bOn, aOn) : 0.22;
+  const office = focus === 'office' ? 1 : focus === 'all' ? Math.max(oOn, aOn) : 0.22;
+  const all = focus === 'all' ? aOn : 0;
   const sheets = 1 + Math.round(2 * clamp01((f - fb(57)) / 30));
   const pipe = 90 + 250 * clamp01((f - fb(61)) / 38);
   const versions = 1 + Math.round(9 * clamp01((f - fb(65)) / 32));
+  const camX = focus === 'paper' ? 685 : focus === 'office' ? -685 : 0;
+  const camS = focus === 'all' ? 1 : 1.12;
   return (
     <AbsoluteFill>
       <SceneLabel f={f} at={at} text="SAME PLAYBOOK · THREE MORE STAGES" sub="同一套剧本，换了三个舞台" />
-      <MiniPanel x={130} y={235} label="PAPERLESS · 1975—NOW" stat={`×${sheets}`} active={Math.max(paper, all)}>
+      <div style={{position: 'absolute', top: 0, left: camX, width: 1920, height: 1080, transform: `scale(${camS})`, transformOrigin: '960px 540px'}}>
+      <MiniPanel x={130} y={235} s={1} label="PAPERLESS · 1975—NOW" stat={`×${sheets}`} active={Math.max(paper, all)}>
         <svg width={420} height={300} style={{position: 'absolute', left: 0, top: 0}}>
           <rect x={20} y={190} width={360} height={16} fill="rgba(214,180,106,0.12)" stroke={G.goldLine} />
           <rect x={54} y={110} width={110} height={70} fill="rgba(20,15,9,0.9)" stroke={G.goldLine} />
@@ -1196,7 +1202,7 @@ export const Modern2Scene: React.FC<{f: number}> = ({f}) => {
         </svg>
       </MiniPanel>
 
-      <MiniPanel x={725} y={235} label="BANDWIDTH · 2000s" stat="4K" active={Math.max(band, all)}>
+      <MiniPanel x={725} y={235} s={1} label="BANDWIDTH · 2000s" stat="4K" active={Math.max(band, all)}>
         <svg width={420} height={300} style={{position: 'absolute', left: 0, top: 0}}>
           <line x1={20} y1={150} x2={400} y2={150} stroke={G.goldFaint} strokeWidth={2} />
           <line x1={20} y1={112} x2={20 + pipe} y2={112} stroke={G.goldBright} strokeWidth={2} />
@@ -1212,7 +1218,7 @@ export const Modern2Scene: React.FC<{f: number}> = ({f}) => {
         </svg>
       </MiniPanel>
 
-      <MiniPanel x={1320} y={235} label="OFFICE · AI" stat={`×${versions}`} active={Math.max(office, all)}>
+      <MiniPanel x={1320} y={235} s={1} label="OFFICE · AI" stat={`×${versions}`} active={Math.max(office, all)}>
         <svg width={420} height={300} style={{position: 'absolute', left: 0, top: 0}}>
           <rect x={22} y={60} width={120} height={150} fill="rgba(239,230,210,0.07)" stroke={G.goldBright} />
           {[0, 1, 2, 3, 4].map((i) => <line key={i} x1={38} y1={84 + i * 18} x2={i === 4 ? 100 : 124} y2={84 + i * 18} stroke={G.ivoryDim} opacity={0.55} />)}
@@ -1225,7 +1231,24 @@ export const Modern2Scene: React.FC<{f: number}> = ({f}) => {
           <line x1={350} y1={84} x2={366} y2={92} stroke={G.goldBright} strokeWidth={2} />
         </svg>
       </MiniPanel>
+      </div>
 
+      {focus === 'paper' ? (
+        <div style={{position: 'absolute', left: 76, top: 300, width: 250, opacity: clamp01((f - at) / 18)}}>
+          <div style={{fontFamily: GF.num, fontSize: 116, lineHeight: 1, ...goldText(0.35)}}>20</div>
+          <div style={{fontFamily: GF.cn, fontSize: 26, letterSpacing: 6, color: G.ivoryDim, marginTop: 2}}>年 无 纸 化</div>
+          <svg width={220} height={260} style={{marginTop: 28}}>
+            {Array.from({length: 6}, (_, i) => (
+              <rect key={i} x={20 + i * 8} y={30 + i * 22} width={150} height={200} fill="rgba(239,230,210,0.05)" stroke={G.goldLine} />
+            ))}
+            {Array.from({length: 5}, (_, i) => <line key={`l${i}`} x1={38} y1={64 + i * 24} x2={150} y2={64 + i * 24} stroke={G.ivoryDim} opacity={0.4} />)}
+            <text x={110} y={250} textAnchor="middle" fontFamily={GF.cn} fontSize={16} letterSpacing={3} fill={G.ivoryFaint}>用纸 ×3</text>
+          </svg>
+        </div>
+      ) : null}
+      <div style={{position: 'absolute', right: 56, top: 104, textAlign: 'right', fontFamily: GF.cn, fontSize: 26, letterSpacing: 6, color: G.goldBright, textShadow: '0 0 18px rgba(243,220,160,0.35)'}}>
+        {focus === 'paper' ? '用纸 ×3' : focus === 'band' ? '4K 视频' : focus === 'office' ? '一下午 ×10' : '三个舞台'}
+      </div>
       <div style={{position: 'absolute', left: 0, right: 0, top: 790, textAlign: 'center', fontFamily: GF.cn, fontSize: 22, letterSpacing: 6, color: G.ivoryDim, opacity: clamp01((f - fb(69)) / 16)}}>
         效率提升，最后都变成了新的「及格线」
       </div>
@@ -1245,8 +1268,9 @@ const EyeIcon: React.FC<{o: number}> = ({o}) => (
   </svg>
 );
 
-export const ValueScene: React.FC<{f: number}> = ({f}) => {
-  const at = SHOTS.value[0];
+export const ValueScene: React.FC<{f: number; focus?: 'band' | 'ai' | 'all'; at?: number}> = ({f, focus = 'all', at = SHOTS.valueBand[0]}) => {
+  const bandOn = focus !== 'ai';
+  const aiOn = focus !== 'band';
   const p = clamp01((f - at) / 20);
   const arrow = (x1: number, y1: number, x2: number, y2: number, o: number) => (
     <g opacity={o}>
@@ -1258,20 +1282,28 @@ export const ValueScene: React.FC<{f: number}> = ({f}) => {
     <AbsoluteFill>
       <SceneLabel f={f} at={at} text="VALUE MIGRATION" sub="价格下跌的地方，价值会迁移到稀缺的地方" />
       <div style={{position: 'absolute', left: 0, right: 0, top: 300, textAlign: 'center', fontFamily: GF.cn, fontSize: 64, fontWeight: 900, letterSpacing: 18, ...goldText(0.7), opacity: p}}>价值迁徙</div>
-      <div style={{position: 'absolute', left: 220, top: 460, width: 650, opacity: clamp01((f - at - 10) / 18)}}>
+      <div style={{position: 'absolute', left: 220, top: 460, width: 650, opacity: (bandOn ? 1 : 0.12) * clamp01((f - at - 10) / 18), transform: `scale(${focus === 'band' ? 1.12 : 1})`, transformOrigin: 'left center'}}>
         <div style={{fontFamily: GF.cn, fontSize: 34, letterSpacing: 6, color: G.ivory}}>带宽 <span style={{color: G.ivoryFaint}}>↓</span></div>
         <svg width={620} height={80} style={{marginTop: 12}}>
           {arrow(20, 40, 560, 40, clamp01((f - at - 20) / 20))}
         </svg>
         <div style={{fontFamily: GF.cn, fontSize: 40, letterSpacing: 6, ...goldText(0.75)}}>注意力 <span style={{color: G.ivoryFaint}}>↑</span></div>
         <div style={{position: 'absolute', right: 20, top: 40}}><EyeIcon o={clamp01((f - at - 30) / 20)} /></div>
+        <div style={{position: 'absolute', left: 0, top: 210, display: 'flex', gap: 18, alignItems: 'center', fontFamily: GF.cn, fontSize: 20, color: G.ivoryDim}}>
+          <span>带宽</span><span style={{fontFamily: GF.num, fontSize: 30, color: G.ivory}}>100 → 1</span>
+          <span style={{marginLeft: 12}}>注意力</span><span style={{fontFamily: GF.num, fontSize: 30, color: G.goldBright}}>1 → 100</span>
+        </div>
       </div>
-      <div style={{position: 'absolute', left: 1050, top: 460, width: 680, opacity: clamp01((f - at - 24) / 18)}}>
+      <div style={{position: 'absolute', left: 1050, top: 460, width: 680, opacity: (aiOn ? 1 : 0.12) * clamp01((f - at - 24) / 18), transform: `scale(${focus === 'ai' ? 1.12 : 1})`, transformOrigin: 'right center'}}>
         <div style={{fontFamily: GF.cn, fontSize: 34, letterSpacing: 6, color: G.ivory}}>AI 方案 <span style={{color: G.ivoryFaint}}>↓</span></div>
         <svg width={620} height={80} style={{marginTop: 12}}>
           {arrow(20, 40, 560, 40, clamp01((f - at - 34) / 20))}
         </svg>
         <div style={{fontFamily: GF.cn, fontSize: 38, letterSpacing: 4, ...goldText(0.75)}}>能源 · 数据 · 判断力 <span style={{color: G.ivoryFaint}}>↑</span></div>
+        <div style={{position: 'absolute', left: 0, top: 210, display: 'flex', gap: 18, alignItems: 'center', fontFamily: GF.cn, fontSize: 20, color: G.ivoryDim}}>
+          <span>AI</span><span style={{fontFamily: GF.num, fontSize: 30, color: G.ivory}}>$60 → $2.19</span>
+          <span style={{marginLeft: 12}}>稀缺项</span><span style={{fontFamily: GF.num, fontSize: 30, color: G.goldBright}}>↑↑</span>
+        </div>
       </div>
       <div style={{position: 'absolute', left: 0, right: 0, top: 840, textAlign: 'center', fontFamily: GF.cn, fontSize: 20, letterSpacing: 4, color: G.ivoryFaint, opacity: clamp01((f - at - 60) / 24)}}>
         便宜的东西负责普及，稀缺的东西负责定价
@@ -1283,47 +1315,83 @@ export const ValueScene: React.FC<{f: number}> = ({f}) => {
 
 /* ---------------- 5 分钟版：时间账单 ---------------- */
 
-export const TimeScene: React.FC<{f: number}> = ({f}) => {
-  const at = SHOTS.time[0];
-  const bill = f >= fb(97);
+export const TimeScene: React.FC<{f: number; phase?: 'clock' | 'tasks' | 'bill' | 'close'; at?: number}> = ({f, phase = 'clock', at = SHOTS.timeClock[0]}) => {
   const receipt = clamp01((f - fb(97)) / 24);
   const left = 1 - 0.78 * clamp01((f - at - 20) / 70);
   return (
     <AbsoluteFill>
       <SceneLabel f={f} at={at} text="THE TIME BILL" sub="省下来的时间，最后被谁拿走了" />
-      {!bill ? (
+      {phase === 'clock' ? (
         <>
-          <div style={{position: 'absolute', left: 260, top: 280, width: 380, height: 420, opacity: clamp01((f - at) / 18)}}>
-            <svg width={380} height={380} viewBox="0 0 380 380">
-              <circle cx={190} cy={190} r={154} fill="rgba(3,3,3,0.5)" stroke={G.goldLine} strokeWidth={2} />
-              {Array.from({length: 12}, (_, i) => {
-                const a = (i / 12) * Math.PI * 2;
-                return <line key={i} x1={190 + Math.cos(a) * 142} y1={190 + Math.sin(a) * 142} x2={190 + Math.cos(a) * 154} y2={190 + Math.sin(a) * 154} stroke={G.gold} strokeWidth={i % 3 === 0 ? 3 : 1} />;
+          <div style={{position: 'absolute', left: 560, top: 230, width: 800, height: 800, opacity: clamp01((f - at) / 18)}}>
+            <svg width={800} height={800} viewBox="0 0 800 800">
+              <circle cx={400} cy={400} r={330} fill="rgba(3,3,3,0.55)" stroke={G.goldLine} strokeWidth={2} />
+              <circle cx={400} cy={400} r={300} fill="none" stroke={G.goldFaint} strokeWidth={1} strokeDasharray="3 12" />
+              {Array.from({length: 60}, (_, i) => {
+                const a = (i / 60) * Math.PI * 2;
+                const long = i % 5 === 0;
+                return <line key={i} x1={400 + Math.cos(a) * (long ? 276 : 288)} y1={400 + Math.sin(a) * (long ? 276 : 288)} x2={400 + Math.cos(a) * 300} y2={400 + Math.sin(a) * 300} stroke={G.gold} strokeWidth={long ? 4 : 1} />;
               })}
-              <line x1={190} y1={190} x2={190 + Math.cos(-Math.PI / 2 + f * 0.02) * 92} y2={190 + Math.sin(-Math.PI / 2 + f * 0.02) * 92} stroke={G.goldBright} strokeWidth={4} />
-              <line x1={190} y1={190} x2={190 + Math.cos(f * 0.006) * 118} y2={190 + Math.sin(f * 0.006) * 118} stroke={G.ivory} strokeWidth={2} />
-              <circle cx={190} cy={190} r={9} fill={G.goldBright} style={{filter: `drop-shadow(0 0 12px ${G.gold})`}} />
+              {Array.from({length: 12}, (_, i) => {
+                const a = (i / 12) * Math.PI * 2 - Math.PI / 2;
+                return <text key={i} x={400 + Math.cos(a) * 246} y={400 + Math.sin(a) * 246 + 10} textAnchor="middle" fontFamily={GF.num} fontSize={30} fill={G.ivoryDim}>{i === 0 ? 12 : i}</text>;
+              })}
+              <line x1={400} y1={400} x2={400 + Math.cos(-Math.PI / 2 + f * 0.02) * 190} y2={400 + Math.sin(-Math.PI / 2 + f * 0.02) * 190} stroke={G.goldBright} strokeWidth={7} />
+              <line x1={400} y1={400} x2={400 + Math.cos(f * 0.006) * 250} y2={400 + Math.sin(f * 0.006) * 250} stroke={G.ivory} strokeWidth={3} />
+              <circle cx={400} cy={400} r={16} fill={G.goldBright} style={{filter: `drop-shadow(0 0 18px ${G.gold})`}} />
             </svg>
           </div>
-          <div style={{position: 'absolute', left: 760, top: 300, width: 900, opacity: clamp01((f - at) / 18)}}>
+          <div style={{position: 'absolute', left: 90, top: 300, width: 360, opacity: clamp01((f - at - 8) / 18)}}>
+            <div style={{fontFamily: GF.cn, fontSize: 22, letterSpacing: 5, color: G.ivoryDim}}>一年 365 天</div>
+            <svg width={340} height={300} style={{marginTop: 18}}>
+              {Array.from({length: 35}, (_, i) => (
+                <rect key={i} x={(i % 7) * 46} y={Math.floor(i / 7) * 46} width={34} height={34} fill={rand(i + 10) > 0.7 ? 'rgba(243,220,160,0.14)' : 'rgba(239,230,210,0.03)'} stroke={G.goldFaint} />
+              ))}
+            </svg>
+          </div>
+          <div style={{position: 'absolute', right: 90, top: 330, width: 300, display: 'flex', flexDirection: 'column', gap: 22, opacity: clamp01((f - at - 14) / 18)}}>
+            {[['24h', '一天'], ['8h', '工作'], ['3h', '省下']].map(([v, k]) => (
+              <div key={k} style={{border: `1px solid ${G.goldLine}`, background: 'rgba(24,18,10,0.6)', padding: '14px 20px', display: 'flex', alignItems: 'baseline', gap: 16}}>
+                <span style={{fontFamily: GF.num, fontSize: 54, ...goldText(0.55)}}>{v}</span>
+                <span style={{fontFamily: GF.cn, fontSize: 20, color: G.ivoryDim, letterSpacing: 3}}>{k}</span>
+              </div>
+            ))}
+          </div>
+          <SourceNote>示意：一天 24 小时、工作 8 小时、省下 3 小时是对照用的示例，不是统计数据。</SourceNote>
+        </>
+      ) : phase === 'tasks' ? (
+        <>
+          <div style={{position: 'absolute', left: 160, top: 230, width: 1080, opacity: clamp01((f - at) / 18)}}>
             <div style={{fontFamily: GF.cn, fontSize: 24, letterSpacing: 5, color: G.ivoryDim}}>省下来的时间</div>
-            <div style={{position: 'relative', width: 760, height: 12, background: 'rgba(239,230,210,0.1)', marginTop: 12}}>
+            <div style={{position: 'relative', width: 980, height: 12, background: 'rgba(239,230,210,0.1)', marginTop: 12}}>
               <div style={{position: 'absolute', left: 0, top: 0, bottom: 0, width: `${left * 100}%`, background: G.goldBright, boxShadow: `0 0 18px ${G.gold}`}} />
             </div>
-            {Array.from({length: 10}, (_, i) => {
-              const o = clamp01((f - at - 30 - i * 9) / 10);
+            {Array.from({length: 12}, (_, i) => {
+              const o = clamp01((f - at - 24 - i * 7) / 10);
               return (
-                <div key={i} style={{position: 'absolute', left: (i % 2) * 400, top: 70 + Math.floor(i / 2) * 92, width: 350, height: 66, opacity: o, border: `1px solid ${G.goldFaint}`, background: 'rgba(214,180,106,0.04)', padding: '10px 16px', fontFamily: GF.cn, fontSize: 20, color: G.ivory}}>
-                  {i % 3 === 0 ? '更高的标准' : i % 3 === 1 ? '更密的排期' : '更快的响应'}
+                <div key={i} style={{position: 'absolute', left: (i % 3) * 350, top: 70 + Math.floor(i / 3) * 110, width: 320, height: 82, opacity: o, border: `1px solid ${G.goldFaint}`, background: 'rgba(214,180,106,0.04)', padding: '12px 18px', fontFamily: GF.cn, fontSize: 21, color: G.ivory}}>
+                  {i % 4 === 0 ? '更高的标准' : i % 4 === 1 ? '更密的排期' : i % 4 === 2 ? '更快的响应' : '更多的方案'}
                 </div>
               );
             })}
+          </div>
+          <div style={{position: 'absolute', right: 100, top: 300, width: 290, height: 290, opacity: clamp01((f - at - 8) / 18)}}>
+            <svg width={290} height={290} viewBox="0 0 290 290">
+              <circle cx={145} cy={145} r={112} fill="rgba(3,3,3,0.6)" stroke={G.goldLine} strokeWidth={2} />
+              {Array.from({length: 12}, (_, i) => {
+                const a = (i / 12) * Math.PI * 2;
+                return <line key={i} x1={145 + Math.cos(a) * 100} y1={145 + Math.sin(a) * 100} x2={145 + Math.cos(a) * 112} y2={145 + Math.sin(a) * 112} stroke={G.gold} strokeWidth={i % 3 === 0 ? 3 : 1} />;
+              })}
+              <line x1={145} y1={145} x2={145 + Math.cos(-Math.PI / 2 + f * 0.02) * 70} y2={145 + Math.sin(-Math.PI / 2 + f * 0.02) * 70} stroke={G.goldBright} strokeWidth={4} />
+              <line x1={145} y1={145} x2={145 + Math.cos(f * 0.006) * 92} y2={145 + Math.sin(f * 0.006) * 92} stroke={G.ivory} strokeWidth={2} />
+              <circle cx={145} cy={145} r={8} fill={G.goldBright} />
+            </svg>
           </div>
           <SourceNote>示意：省下的时间会进入新的任务/标准；不是精确统计。</SourceNote>
         </>
       ) : (
         <>
-          <div style={{position: 'absolute', left: 760, top: 230, width: 700, height: 560, opacity: receipt, transform: `translateY(${(1 - receipt) * 30}px)`, background: 'linear-gradient(160deg, #d9c59a, #b99a63)', border: `1px solid ${G.goldBright}`, boxShadow: '0 30px 90px rgba(0,0,0,0.7)'}}>
+          <div style={{position: 'absolute', left: 760, top: 230, width: 700, height: 560, opacity: receipt, transform: `translateY(${(1 - receipt) * 30}px) scale(${phase === 'close' ? 1.12 : 1})`, transformOrigin: '50% 50%', background: 'linear-gradient(160deg, #d9c59a, #b99a63)', border: `1px solid ${G.goldBright}`, boxShadow: '0 30px 90px rgba(0,0,0,0.7)'}}>
             <div style={{position: 'absolute', left: 34, top: 26, fontFamily: GF.latin, fontSize: 16, letterSpacing: 6, color: '#3a2a12'}}>THE TOTAL BILL</div>
             <div style={{position: 'absolute', left: 34, top: 64, fontFamily: GF.cn, fontSize: 44, fontWeight: 900, color: '#1c1206'}}>总账单</div>
             <div style={{position: 'absolute', left: 34, right: 34, top: 130, height: 1, background: 'rgba(30,20,8,0.45)'}} />
@@ -1332,10 +1400,12 @@ export const TimeScene: React.FC<{f: number}> = ({f}) => {
               ['更宽的路', '×3.1'],
               ['更多的调用', '×10'],
               ['更高的及格线', '×？'],
+              ['更长的通勤', '×2.1'],
+              ['更满的排期', '×3.7'],
             ].map(([k, v], i) => (
-              <div key={k} style={{position: 'absolute', left: 34, right: 34, top: 160 + i * 76, display: 'flex', justifyContent: 'space-between', fontFamily: GF.cn, fontSize: 26, color: '#2c1d0c'}}>
+              <div key={k} style={{position: 'absolute', left: 34, right: 34, top: 150 + i * 62, display: 'flex', justifyContent: 'space-between', fontFamily: GF.cn, fontSize: 22, color: '#2c1d0c'}}>
                 <span>{k}</span>
-                <span style={{fontFamily: GF.num, fontSize: 34}}>{v}</span>
+                <span style={{fontFamily: GF.num, fontSize: 30}}>{v}</span>
               </div>
             ))}
             <div style={{position: 'absolute', left: 34, right: 34, bottom: 54, height: 1, background: 'rgba(30,20,8,0.45)'}} />
@@ -1358,14 +1428,14 @@ export const TimeScene: React.FC<{f: number}> = ({f}) => {
 
 /* ---------------- 5 分钟版：门槛 / 结尾 ---------------- */
 
-export const FinaleScene: React.FC<{f: number}> = ({f}) => {
-  const at = SHOTS.finale[0];
+export const FinaleScene: React.FC<{f: number; phase?: 'gate' | 'clock'; at?: number}> = ({f, phase = 'gate', at = SHOTS.finaleGate[0]}) => {
   const open = clamp01((f - at) / 30);
   const o = clamp01((f - at) / 18);
+  const clock = phase === 'clock';
   return (
     <AbsoluteFill>
       <div style={{position: 'absolute', left: 0, right: 0, top: 300, textAlign: 'center', fontFamily: GF.cn, fontSize: 28, letterSpacing: 10, color: G.ivoryDim, opacity: o}}>省，不是变少；省，是把门槛降低</div>
-      <svg width={1920} height={1080} style={{position: 'absolute'}} opacity={o}>
+      <svg width={1920} height={1080} style={{position: 'absolute'}} opacity={clock ? 0 : o}>
         <defs>
           <radialGradient id="jevons-finale-glow" cx="50%" cy="50%" r="50%">
             <stop offset="0" stopColor="#f3dca0" stopOpacity={0.28} />
@@ -1386,6 +1456,24 @@ export const FinaleScene: React.FC<{f: number}> = ({f}) => {
           return <circle key={i} cx={sx + (tx - sx) * t} cy={800 + rand(i + 630) * 60 - t * 20} r={2 + rand(i + 640) * 4} fill={G.goldBright} opacity={0.3 + 0.5 * rand(i + 650)} />;
         })}
       </svg>
+      {clock ? (
+        <div style={{position: 'absolute', left: 660, top: 300, width: 600, height: 600, opacity: o}}>
+          <svg width={600} height={600} viewBox="0 0 600 600">
+            <circle cx={300} cy={300} r={230} fill="rgba(3,3,3,0.7)" stroke={G.goldLine} strokeWidth={2} />
+            <circle cx={300} cy={300} r={210} fill="none" stroke={G.goldFaint} strokeWidth={1} strokeDasharray="3 10" />
+            {Array.from({length: 12}, (_, i) => {
+              const a = (i / 12) * Math.PI * 2;
+              return <line key={i} x1={300 + Math.cos(a) * 214} y1={300 + Math.sin(a) * 214} x2={300 + Math.cos(a) * 230} y2={300 + Math.sin(a) * 230} stroke={G.gold} strokeWidth={i % 3 === 0 ? 4 : 1.5} />;
+            })}
+            <line x1={300} y1={300} x2={300 + Math.cos(-Math.PI / 3 + f * 0.01) * 130} y2={300 + Math.sin(-Math.PI / 3 + f * 0.01) * 130} stroke={G.goldBright} strokeWidth={5} />
+            <line x1={300} y1={300} x2={300 + Math.cos(Math.PI / 2 + f * 0.003) * 185} y2={300 + Math.sin(Math.PI / 2 + f * 0.003) * 185} stroke={G.ivory} strokeWidth={2.5} />
+            <circle cx={300} cy={300} r={12} fill={G.goldBright} style={{filter: `drop-shadow(0 0 16px ${G.gold})`}} />
+          </svg>
+        </div>
+      ) : null}
+      {clock ? (
+        <div style={{position: 'absolute', left: 0, right: 0, top: 880, textAlign: 'center', fontFamily: GF.cn, fontSize: 34, letterSpacing: 6, color: G.ivory, opacity: o}}>把省下来的时间，还给自己。</div>
+      ) : null}
       <SourceNote>示意：门槛降低后，新增用户与新增用量会一起进来；省下来的资源会被系统重新定价。</SourceNote>
     </AbsoluteFill>
   );

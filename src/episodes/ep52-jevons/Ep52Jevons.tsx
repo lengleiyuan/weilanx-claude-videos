@@ -99,9 +99,18 @@ export const Ep52Jevons: React.FC = () => {
       <Layer f={f} a={SHOTS.giant[0]} b={SHOTS.giant[1]}><GiantScene f={fs} /></Layer>
       <Layer f={f} a={SHOTS.gate[0]} b={SHOTS.gate[1]}><GateScene f={fs} /></Layer>
 
-      <Layer f={f} a={SHOTS.modern2[0]} b={SHOTS.modern2[1]}><Modern2Scene f={fs} /></Layer>
-      <Layer f={f} a={SHOTS.value[0]} b={SHOTS.value[1]}><ValueScene f={fs} /></Layer>
-      <Layer f={f} a={SHOTS.time[0]} b={SHOTS.time[1]}><TimeScene f={fs} /></Layer>
+      <Layer f={f} a={SHOTS.paperless[0]} b={SHOTS.paperless[1]}><Modern2Scene f={fs} focus="paper" at={SHOTS.paperless[0]} /></Layer>
+      <Layer f={f} a={SHOTS.bandwidth[0]} b={SHOTS.bandwidth[1]}><Modern2Scene f={fs} focus="band" at={SHOTS.bandwidth[0]} /></Layer>
+      <Layer f={f} a={SHOTS.office[0]} b={SHOTS.office[1]}><Modern2Scene f={fs} focus="office" at={SHOTS.office[0]} /></Layer>
+      <Layer f={f} a={SHOTS.montage2[0]} b={SHOTS.montage2[1]}><Modern2Scene f={fs} focus="all" at={SHOTS.montage2[0]} /></Layer>
+
+      <Layer f={f} a={SHOTS.valueBand[0]} b={SHOTS.valueBand[1]}><ValueScene f={fs} focus="band" at={SHOTS.valueBand[0]} /></Layer>
+      <Layer f={f} a={SHOTS.valueAI[0]} b={SHOTS.valueAI[1]}><ValueScene f={fs} focus="ai" at={SHOTS.valueAI[0]} /></Layer>
+
+      <Layer f={f} a={SHOTS.timeClock[0]} b={SHOTS.timeClock[1]}><TimeScene f={fs} phase="clock" at={SHOTS.timeClock[0]} /></Layer>
+      <Layer f={f} a={SHOTS.timeTasks[0]} b={SHOTS.timeTasks[1]}><TimeScene f={fs} phase="tasks" at={SHOTS.timeTasks[0]} /></Layer>
+      <Layer f={f} a={SHOTS.timeBill[0]} b={SHOTS.timeBill[1]}><TimeScene f={fs} phase="bill" at={SHOTS.timeBill[0]} /></Layer>
+      <Layer f={f} a={SHOTS.timeClose[0]} b={SHOTS.preHit3[1]}><TimeScene f={fs} phase="close" at={SHOTS.timeBill[0]} /></Layer>
 
       {f >= HIT3 && f < HIT4 ? (
         <AbsoluteFill style={{opacity: 1 - clamp01((f - (HIT4 - 20)) / 20)}}>
@@ -115,17 +124,18 @@ export const Ep52Jevons: React.FC = () => {
         </AbsoluteFill>
       ) : null}
 
-      <Layer f={f} a={SHOTS.finale[0]} b={SHOTS.finale[1]}><FinaleScene f={fs} /></Layer>
-      <Layer f={f} a={SHOTS.end[0]} b={DURATION} fin={20} fout={1}><EndScene f={fs} /></Layer>
+      <Layer f={f} a={SHOTS.finaleGate[0]} b={SHOTS.finaleGate[1]}><FinaleScene f={fs} phase="gate" at={SHOTS.finaleGate[0]} /></Layer>
+      <Layer f={f} a={SHOTS.finaleClock[0]} b={SHOTS.finaleClock[1]}><FinaleScene f={fs} phase="clock" at={SHOTS.finaleClock[0]} /></Layer>
+      <Layer f={f} a={SHOTS.endTitle[0]} b={SHOTS.endTitle[1]} fin={12} fout={4}><EndScene f={fs} phase="title" at={SHOTS.endTitle[0]} /></Layer>
+      <Layer f={f} a={SHOTS.endQuestion[0]} b={DURATION} fin={8} fout={1}><EndScene f={fs} phase="question" at={SHOTS.endQuestion[0]} /></Layer>
 
       <AbsoluteFill style={{background: '#000', opacity: dark, pointerEvents: 'none'}} />
 
       {CUES.map(([bar, zh, en], i) => {
         const at = cueStart(i);
         if (f < at - 2) return null;
-        if (bar === 56) return null; // 结尾的大问题由 EndScene 自己画，避免和字幕重复
         const halfOut: Record<number, number> = {3: DARK_FROM, 38: DARK_FROM2, 110: DARK_FROM3, 117: DARK_FROM4};
-        const out = bar === 125 ? SHOTS.end[0] - 4 : halfOut[bar] ?? cueEnd(i) - 12;
+        const out = bar === 125 ? SHOTS.endTitle[0] - 4 : halfOut[bar] ?? cueEnd(i) - 12;
         if (f > out + 14) return null;
         const text = bar === 53 ? '不是故障，是默认设置。' : zh;
         const english = bar === 53 ? 'It’s the default.' : en;

@@ -149,12 +149,22 @@ export const SHOTS = {
   ai: [fb(45), fb(49)], // AI 接进每张表格：调用量爆炸
   giant: [fb(49), fb(53)], // 没有巨头靠省总预算成功：打穿单价
   gate: [fb(53), fb(57)], // 门槛降低：越省越多；重新定义锚词
-  modern2: [fb(57), fb(75)], // 无纸化 / 带宽 / 办公软件
-  value: [fb(75), fb(89)], // 价值迁徙
-  time: [fb(89), HIT3], // 时间 / 边界 / 总账单
+  paperless: [fb(57), fb(61)], // 无纸化：用纸 ×3
+  bandwidth: [fb(61), fb(65)], // 带宽：文字 → 4K
+  office: [fb(65), fb(69)], // 办公软件：2 遍 → 10 版
+  montage2: [fb(69), fb(75)], // 三个舞台并置
+  valueBand: [fb(75), fb(81)], // 带宽 → 注意力
+  valueAI: [fb(81), fb(85)], // AI → 能源 / 数据 / 判断力
+  timeClock: [fb(85), fb(91)], // 省下来的时间
+  timeTasks: [fb(91), fb(97)], // 排期墙
+  timeBill: [fb(97), fb(103)], // 总账单收据
+  timeClose: [fb(103), fb(109)], // 收据特写
+  preHit3: [fb(109), HIT3], // 收暗 / 静止 / 准备砸字
   hit3: [HIT3, HIT4], // 第二个大重拍：总账单
-  finale: [HIT4, fb(132)], // 第三个重拍：门槛；重新定义锚词
-  end: [fb(132), DURATION], // 结尾问题
+  finaleGate: [HIT4, fb(125)], // 门打开 / 人群
+  finaleClock: [fb(125), fb(132)], // 时钟 / 把时间还给自己
+  endTitle: [fb(132), fb(136)], // 片尾标题
+  endQuestion: [fb(136), DURATION], // 片尾问题
 } as const;
 
 /* ---------------- 片中的事实与数字（测试核对） ---------------- */
