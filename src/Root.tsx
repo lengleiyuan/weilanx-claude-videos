@@ -69,6 +69,9 @@ import {Ep30Divorce} from './episodes/ep30-tang-divorce/Ep30Divorce';
 import {Ep30CoverTall} from './episodes/ep30-tang-divorce/CoverTall';
 import {DURATION as EP32_DURATION, FPS as EP32_FPS, H as EP32_H, W as EP32_W} from './episodes/ep32-love-lasts/timeline';
 import {Ep32Love} from './episodes/ep32-love-lasts/Ep32Love';
+import {DURATION as EP52_DURATION, FPS as EP52_FPS, H as EP52_H, W as EP52_W} from './episodes/ep52-jevons/timeline';
+import {Ep52Jevons} from './episodes/ep52-jevons/Ep52Jevons';
+import {Ep52CoverTall} from './episodes/ep52-jevons/Cover';
 import {DURATION as EP34_DURATION, FPS as EP34_FPS, H as EP34_H, W as EP34_W} from './episodes/ep34-song-takeout/timeline';
 import {Ep34Takeout} from './episodes/ep34-song-takeout/Ep34Takeout';
 import {Ep34CoverTall} from './episodes/ep34-song-takeout/CoverTall';
@@ -184,6 +187,8 @@ export const Root: React.FC = () => (
       <Composition id="ep24-birthday-paradox" component={Ep24Birthday} durationInFrames={EP24_DURATION} fps={EP24_FPS} width={EP24_W} height={EP24_H} />
       <Still id="ep24-birthday-paradox-cover-tall" component={Ep24CoverTall} width={1080} height={1440} />
       <Composition id="ep32-love-lasts" component={Ep32Love} durationInFrames={EP32_DURATION} fps={EP32_FPS} width={EP32_W} height={EP32_H} />
+      <Composition id="ep52-jevons" component={Ep52Jevons} durationInFrames={EP52_DURATION} fps={EP52_FPS} width={EP52_W} height={EP52_H} />
+      <Still id="ep52-jevons-cover-tall" component={Ep52CoverTall} width={1080} height={1440} />
     </Folder>
     <Folder name="06-战术屏科普风">
       <Composition id="ep25-behind-cover" component={Ep25Cover} durationInFrames={EP25_DURATION} fps={EP25_FPS} width={EP25_W} height={EP25_H} />
